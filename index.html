@@ -8,8 +8,10 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0a0a0c; color: #ffffff; overflow: hidden; padding: 20px 20px 80px 20px; height: 100vh; display: flex; flex-direction: column; position: relative; }
         .container { max-width: 1400px; margin: 0 auto; width: 100%; flex: 1; display: flex; flex-direction: column; }
+        
         .fullscreen-btn { position: fixed; top: 20px; right: 20px; background: rgba(255, 255, 255, 0.1); color: #fff; border: 1px solid rgba(255, 255, 255, 0.2); padding: 8px 12px; border-radius: 6px; cursor: pointer; opacity: 0.2; transition: opacity 0.3s, background 0.3s; z-index: 2000; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
         .fullscreen-btn:hover { opacity: 1; background: rgba(255, 255, 255, 0.2); }
+
         header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #ffcc00; padding-bottom: 15px; margin-bottom: 20px; }
         .logo-title h1 { font-size: 2.5rem; text-transform: uppercase; letter-spacing: 2px; color: #ffffff; }
         .logo-title span { color: #ffcc00; }
@@ -17,12 +19,13 @@
         .time-label { font-size: 0.9rem; text-transform: uppercase; color: #8a8a93; letter-spacing: 1px; }
         .digital-clock { font-family: 'Courier New', Courier, monospace; font-size: 3.5rem; font-weight: bold; color: #ffcc00; text-shadow: 0 0 10px rgba(255, 204, 0, 0.3); line-height: 1; }
 
-        /* TOP BAR */
+        /* UPCOMING TOP BAR */
         .upcoming-top-bar { display: flex; background-color: #141418; border: 2px solid #333; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.5); overflow: hidden; margin-bottom: 25px; min-height: 110px; }
         .upcoming-left { padding: 15px 25px; background: linear-gradient(135deg, #1e88e5, #1565c0); color: #fff; display: flex; flex-direction: column; justify-content: center; min-width: 35%; border-right: 3px solid #0a0a0c; }
         .upcoming-left-label { font-size: 1rem; font-weight: bold; color: rgba(255,255,255,0.8); letter-spacing: 2px; margin-bottom: 5px; }
         .top-next-name { font-size: 2.2rem; font-weight: 900; text-transform: uppercase; line-height: 1; margin-bottom: 5px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
         .top-next-act { font-size: 1.2rem; font-weight: 700; color: #ffcc00; text-transform: uppercase; }
+        
         .upcoming-right { padding: 15px 30px; flex: 1; display: flex; justify-content: space-between; align-items: center; transition: all 0.3s ease; background-color: #1a1a24; }
         .gate-title { font-size: 1.6rem; font-weight: 800; color: #a0a0ab; text-transform: uppercase; letter-spacing: 1px; }
         .gate-times { font-size: 1.2rem; color: #8a8a93; margin-top: 5px; }
@@ -41,7 +44,7 @@
         .gate-flash-fast { animation: gate-fast-flash 0.5s infinite alternate !important; }
         @keyframes gate-fast-flash { from { background-color: #E43138; box-shadow: inset 0 0 30px rgba(0,0,0,0.5); } to { background-color: #1a1a24; box-shadow: none; } }
 
-        /* MAIN */
+        /* MAIN ON TRACK */
         .main-display { flex: 1; display: flex; flex-direction: column; justify-content: center; }
         .session-card { background: linear-gradient(145deg, #111e16, #141418); border-left: 12px solid #00e676; border-radius: 12px; padding: 40px; box-shadow: 0 15px 35px rgba(0, 230, 118, 0.15); position: relative; }
         .session-status { display: inline-block; padding: 6px 16px; border-radius: 4px; font-size: 1rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 20px; background-color: #00e676; color: #000; }
@@ -50,11 +53,12 @@
         .countdown-box { margin-top: 35px; background-color: rgba(0, 0, 0, 0.5); padding: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; border: 1px solid #222; }
         .countdown-label { font-size: 2rem; text-transform: uppercase; color: #a0a0ab; font-weight: 600; letter-spacing: 1px; }
         .countdown-timer { font-family: 'Courier New', Courier, monospace; font-size: 7.5rem; font-weight: bold; color: #00e676; text-shadow: 0 0 20px rgba(0, 230, 118, 0.4); line-height: 1; }
+        
         .qualifying-warning-box { margin-top: 25px; background-color: #E43138; color: #ffffff; padding: 25px; border-radius: 8px; font-weight: bold; text-align: center; font-size: 1.8rem; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 0 20px rgba(229, 49, 56, 0.6); animation: pulse-red 1s infinite alternate; display: none; }
         @keyframes pulse-red { from { background-color: #E43138; box-shadow: 0 0 15px rgba(229, 49, 56, 0.6); } to { background-color: #ff5258; box-shadow: 0 0 30px rgba(229, 49, 56, 0.9); } }
         .no-session { text-align: center; padding: 80px; font-size: 2.5rem; font-weight: bold; color: #8a8a93; background-color: #141418; border-radius: 12px; border: 2px dashed #444; }
 
-        /* TICKER */
+        /* BOTTOM TICKER */
         .ticker-container { position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; background-color: #141418; border-top: 3px solid #ffcc00; display: flex; align-items: center; overflow: hidden; z-index: 1000; box-shadow: 0 -5px 20px rgba(0,0,0,0.8); }
         .ticker-label { background-color: #ffcc00; color: #000; font-weight: 900; text-transform: uppercase; padding: 0 30px; height: 100%; display: flex; align-items: center; white-space: nowrap; z-index: 2; font-size: 1.6rem; letter-spacing: 2px; box-shadow: 5px 0 15px rgba(0,0,0,0.7); }
         .ticker-container.announcement-active { border-top-color: #2196f3; }
@@ -64,6 +68,7 @@
         .ticker-text span.highlight-blue { color: #2196f3; font-weight: 800; }
         .ticker-text span.highlight-yellow { color: #ffcc00; font-weight: 800; }
         @keyframes ticker-move { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
+
     </style>
 </head>
 <body>
@@ -105,8 +110,8 @@
         <main class="main-display">
             <div id="current-session-box" class="session-card">
                 <span class="session-status">ON TRACK NOW</span>
-                <div class="category-name" id="curr-category">LOADING...</div>
-                <div class="activity-name" id="curr-activity">-</div>
+                <div class="category-name" id="curr-category">TRACK CLEAR</div>
+                <div class="activity-name" id="curr-activity">WAITING FOR DATA...</div>
                 <div class="qualifying-warning-box" id="qualifying-warning">
                     ⚠️ WARNING: Drivers must be on track 2 minutes after Qualifying Practice started!
                 </div>
@@ -124,7 +129,7 @@
     <div class="ticker-container" id="bottom-ticker-box">
         <div class="ticker-label" id="ticker-label">NOTE</div>
         <div class="ticker-content-wrapper">
-            <div class="ticker-text" id="ticker-dynamic-text">Loading notes...</div>
+            <div class="ticker-text" id="ticker-dynamic-text">Waiting for notes...</div>
         </div>
     </div>
 
@@ -177,19 +182,20 @@
 
                     let timeStartIndex = -1;
                     for(let j=0; j < cols.length; j++) {
-                        let testVal = cols[j];
+                        let testVal = cols[j] ? cols[j].trim() : "";
                         if (testVal && testVal.split(':').length === 3) testVal = testVal.split(':').slice(0, 2).join(':');
                         if (/^\d{1,2}:\d{2}$/.test(testVal)) { timeStartIndex = j; break; }
                     }
 
                     if (timeStartIndex !== -1 && cols.length >= timeStartIndex + 3) {
-                        let startTime = cols[timeStartIndex];
-                        let endTime = cols[timeStartIndex + 1];
-                        let category = cols[timeStartIndex + 2] || "ALL CLASSES"; 
-                        let activity = cols[timeStartIndex + 3] || "SESSION";
+                        let startTime = cols[timeStartIndex] ? cols[timeStartIndex].trim() : "";
+                        let endTime = cols[timeStartIndex + 1] ? cols[timeStartIndex + 1].trim() : "";
+                        let category = cols[timeStartIndex + 2] ? cols[timeStartIndex + 2].trim() : "ALL CLASSES"; 
+                        let activity = cols[timeStartIndex + 3] ? cols[timeStartIndex + 3].trim() : "SESSION";
                         
                         if (startTime && startTime.split(':').length === 3) startTime = startTime.split(':').slice(0, 2).join(':');
                         if (endTime && endTime.split(':').length === 3) endTime = endTime.split(':').slice(0, 2).join(':');
+                        
                         if (/^\d{1,2}:\d{2}$/.test(startTime) && /^\d{1,2}:\d{2}$/.test(endTime)) {
                             parsedSessions.push({ startTime, endTime, category, activity });
                         }
@@ -197,6 +203,15 @@
                 }
                 if (parsedSessions.length > 0) activeSchedule = parsedSessions;
             } catch (e) { console.error("Live fetch failed:", e); }
+        }
+
+        // ANTI-CRASH TIME FUNCTION
+        function timeToMinutes(timeStr) {
+            if (!timeStr || typeof timeStr !== 'string' || !timeStr.includes(':')) return 0;
+            const parts = timeStr.split(':');
+            const hours = parseInt(parts[0], 10) || 0;
+            const minutes = parseInt(parts[1], 10) || 0;
+            return (hours * 60) + minutes;
         }
 
         function formatTimeFromMinutes(totalMinutes) {
@@ -216,151 +231,162 @@
         }
 
         function updateDashboard() {
-            const timeMode = localStorage.getItem('sim_mode') || 'real';
-            let currentDisplayDate = new Date();
-            
-            if (timeMode === 'sim') {
-                const simTimeStr = localStorage.getItem('sim_time') || "12:00";
-                const [sHours, sMinutes] = simTimeStr.split(':').map(Number);
-                currentDisplayDate.setHours(sHours, sMinutes, currentDisplayDate.getSeconds()); 
-            }
-
-            const hrs = String(currentDisplayDate.getHours()).padStart(2, '0');
-            const mins = String(currentDisplayDate.getMinutes()).padStart(2, '0');
-            const secs = String(currentDisplayDate.getSeconds()).padStart(2, '0');
-            
-            const clockEl = document.getElementById('local-clock');
-            clockEl.textContent = `${hrs}:${mins}:${secs}`;
-            if (timeMode === 'sim') {
-                clockEl.style.color = "#E43138"; clockEl.style.textShadow = "0 0 10px rgba(229, 49, 56, 0.4)";
-                document.querySelector('.time-label').textContent = "SIMULATED TIME";
-            } else {
-                clockEl.style.color = "#ffcc00"; clockEl.style.textShadow = "0 0 10px rgba(255, 204, 0, 0.3)";
-                document.querySelector('.time-label').textContent = "Local Time";
-            }
-
-            const currentMinutesOfDay = currentDisplayDate.getHours() * 60 + currentDisplayDate.getMinutes();
-            const currentSecondsValue = currentMinutesOfDay * 60 + currentDisplayDate.getSeconds();
-
-            let currentSession = null;
-            let upcomingSession = null;
-            const sortedSchedule = [...activeSchedule].sort((a,b) => timeToMinutes(a.startTime) - timeToMinutes(b.startTime));
-
-            for (let session of sortedSchedule) {
-                const startMins = timeToMinutes(session.startTime);
-                const endMins = timeToMinutes(session.endTime);
-                if (currentMinutesOfDay >= startMins && currentMinutesOfDay < endMins) {
-                    currentSession = session;
-                } else if (startMins > currentMinutesOfDay && !upcomingSession) {
-                    upcomingSession = session;
+            try {
+                const timeMode = localStorage.getItem('sim_mode') || 'real';
+                let currentDisplayDate = new Date();
+                
+                if (timeMode === 'sim') {
+                    const simTimeStr = localStorage.getItem('sim_time') || "12:00";
+                    const parts = simTimeStr.split(':');
+                    const sHours = parseInt(parts[0], 10) || 0;
+                    const sMinutes = parseInt(parts[1], 10) || 0;
+                    currentDisplayDate.setHours(sHours, sMinutes, currentDisplayDate.getSeconds()); 
                 }
-            }
 
-            if (!currentSession && !upcomingSession) {
-                document.getElementById('current-session-box').style.display = 'none';
-                document.getElementById('upcoming-modules-box').style.display = 'none';
-                document.getElementById('no-session-box').style.display = 'block';
-                return;
-            }
-            document.getElementById('no-session-box').style.display = 'none';
-
-            // --- CURRENT ---
-            if (currentSession) {
-                document.getElementById('current-session-box').style.display = 'block';
-                document.getElementById('curr-category').textContent = currentSession.category;
-                document.getElementById('curr-activity').textContent = currentSession.activity;
-                const endSecondsTotal = timeToMinutes(currentSession.endTime) * 60;
-                document.getElementById('curr-countdown').textContent = formatSecondsToMMSS(endSecondsTotal - currentSecondsValue);
-
-                if (currentSession.activity.trim().toUpperCase() === "QUALIFYING PRACTICE") {
-                    const elapsedSeconds = currentSecondsValue - (timeToMinutes(currentSession.startTime) * 60);
-                    document.getElementById('qualifying-warning').style.display = (elapsedSeconds >= 0 && elapsedSeconds <= 120) ? 'block' : 'none';
-                } else { document.getElementById('qualifying-warning').style.display = 'none'; }
-            } else {
-                document.getElementById('current-session-box').style.display = 'block';
-                document.getElementById('curr-category').textContent = "TRACK CLEAR";
-                document.getElementById('curr-activity').textContent = "WAITING FOR NEXT SESSION";
-                document.getElementById('curr-countdown').textContent = "00:00";
-                document.getElementById('qualifying-warning').style.display = 'none';
-            }
-
-            // --- UPCOMING ---
-            const upcomingBox = document.getElementById('upcoming-modules-box');
-            if (upcomingSession) {
-                upcomingBox.style.display = 'flex';
-                document.getElementById('top-next-name').textContent = upcomingSession.category;
-                document.getElementById('top-next-act').textContent = `${upcomingSession.activity} @ ${upcomingSession.startTime}`;
-
-                const sessionStartMins = timeToMinutes(upcomingSession.startTime);
-                const gateOpenMins = sessionStartMins - 15;
-                const gateCloseMins = sessionStartMins - 5;
-                const gateCloseSecs = gateCloseMins * 60;
-                const gateOpenSecs = gateOpenMins * 60;
-
-                document.getElementById('gate-time-open').textContent = formatTimeFromMinutes(gateOpenMins);
-                document.getElementById('gate-time-close').textContent = formatTimeFromMinutes(gateCloseMins);
-
-                const secsToGateOpen = gateOpenSecs - currentSecondsValue;
-                const secsToGateClose = gateCloseSecs - currentSecondsValue;
-
-                const gatePanel = document.getElementById('gate-panel');
-                const gateStatusTxt = document.getElementById('gate-status-text');
-                const gateTimerTxt = document.getElementById('gate-countdown-timer');
-
-                let panelClass = "";
-                if (secsToGateOpen > 0) {
-                    gateStatusTxt.textContent = "OPENS IN"; gateTimerTxt.textContent = formatSecondsToMMSS(secsToGateOpen); panelClass = "";
-                } else if (secsToGateClose > 0) {
-                    gateStatusTxt.textContent = "CLOSES IN"; gateTimerTxt.textContent = formatSecondsToMMSS(secsToGateClose);
-                    if (secsToGateClose <= 10) panelClass = "gate-flash-fast";
-                    else if (secsToGateClose <= 300) {
-                        let m30 = secsToGateClose % 30;
-                        if (m30 === 0 || m30 >= 28) panelClass = "gate-flash-red"; else panelClass = "gate-open-solid";
-                    } else panelClass = "gate-open-solid";
+                const hrs = String(currentDisplayDate.getHours()).padStart(2, '0');
+                const mins = String(currentDisplayDate.getMinutes()).padStart(2, '0');
+                const secs = String(currentDisplayDate.getSeconds()).padStart(2, '0');
+                
+                const clockEl = document.getElementById('local-clock');
+                clockEl.textContent = `${hrs}:${mins}:${secs}`;
+                if (timeMode === 'sim') {
+                    clockEl.style.color = "#E43138"; clockEl.style.textShadow = "0 0 10px rgba(229, 49, 56, 0.4)";
+                    document.querySelector('.time-label').textContent = "SIMULATED TIME";
                 } else {
-                    gateStatusTxt.textContent = "CLOSED"; gateTimerTxt.textContent = "00:00"; panelClass = "gate-closed";
+                    clockEl.style.color = "#ffcc00"; clockEl.style.textShadow = "0 0 10px rgba(255, 204, 0, 0.3)";
+                    document.querySelector('.time-label').textContent = "Local Time";
                 }
-                gatePanel.className = `upcoming-right ${panelClass}`;
-            } else {
-                upcomingBox.style.display = 'none';
-            }
 
-            // --- BOTTOM TICKER LOGIC (JSON parsed) ---
-            let customNoteObj = null;
-            try { customNoteObj = JSON.parse(localStorage.getItem('custom_announcement')); } catch(e) {}
-            
-            const cycleSec = currentSecondsValue % 300; 
-            const tickerContainer = document.getElementById('bottom-ticker-box');
-            const tickerLabel = document.getElementById('ticker-label');
-            const tickerElem = document.getElementById('ticker-dynamic-text');
+                const currentMinutesOfDay = currentDisplayDate.getHours() * 60 + currentDisplayDate.getMinutes();
+                const currentSecondsValue = currentMinutesOfDay * 60 + currentDisplayDate.getSeconds();
 
-            let tickerHtml = "";
-            let showAnnouncement = false;
+                let currentSession = null;
+                let upcomingSession = null;
+                const sortedSchedule = [...activeSchedule].sort((a,b) => timeToMinutes(a.startTime) - timeToMinutes(b.startTime));
 
-            if (customNoteObj && customNoteObj.text) {
-                const currentUnix = Math.floor(Date.now() / 1000);
-                const ageSec = currentUnix - customNoteObj.timestamp;
-                // บังคับโชว์ 60 วิแรกหลังกดส่งทันที หรือ โชว์ในช่วงนาทีที่ 5 ของลูป
-                if (ageSec < 60 || cycleSec >= 240) {
-                    showAnnouncement = true;
+                for (let session of sortedSchedule) {
+                    const startMins = timeToMinutes(session.startTime);
+                    const endMins = timeToMinutes(session.endTime);
+                    if (currentMinutesOfDay >= startMins && currentMinutesOfDay < endMins) {
+                        currentSession = session;
+                    } else if (startMins > currentMinutesOfDay && !upcomingSession) {
+                        upcomingSession = session;
+                    }
                 }
-            }
 
-            if (showAnnouncement) {
-                tickerContainer.classList.add('announcement-active');
-                tickerLabel.textContent = "ANNOUNCEMENT";
-                let textStr = `[${customNoteObj.time}] ${customNoteObj.text}`;
-                tickerHtml = `📢 <span class="highlight-yellow">${textStr}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 📢 <span class="highlight-yellow">${textStr}</span>`;
-            } else {
-                tickerContainer.classList.remove('announcement-active');
-                tickerLabel.textContent = "NOTE";
-                let prefix = upcomingSession ? `NEXT: <span class="highlight-blue">${upcomingSession.category}</span> | ` : "";
-                tickerHtml = `${prefix}<span class="highlight-yellow">${GATE_NOTE_DEFAULT}</span> &nbsp;&nbsp;&nbsp;&nbsp; ${prefix}<span class="highlight-yellow">${GATE_NOTE_DEFAULT}</span>`;
-            }
+                if (!currentSession && !upcomingSession) {
+                    document.getElementById('current-session-box').style.display = 'none';
+                    document.getElementById('upcoming-modules-box').style.display = 'none';
+                    document.getElementById('no-session-box').style.display = 'block';
+                    return;
+                }
+                document.getElementById('no-session-box').style.display = 'none';
 
-            if (tickerElem.dataset.lastContent !== tickerHtml) {
-                tickerElem.innerHTML = tickerHtml;
-                tickerElem.dataset.lastContent = tickerHtml;
+                // --- CURRENT ---
+                if (currentSession) {
+                    document.getElementById('current-session-box').style.display = 'block';
+                    document.getElementById('curr-category').textContent = currentSession.category;
+                    document.getElementById('curr-activity').textContent = currentSession.activity;
+                    const endSecondsTotal = timeToMinutes(currentSession.endTime) * 60;
+                    document.getElementById('curr-countdown').textContent = formatSecondsToMMSS(endSecondsTotal - currentSecondsValue);
+
+                    if (currentSession.activity.trim().toUpperCase() === "QUALIFYING PRACTICE") {
+                        const elapsedSeconds = currentSecondsValue - (timeToMinutes(currentSession.startTime) * 60);
+                        document.getElementById('qualifying-warning').style.display = (elapsedSeconds >= 0 && elapsedSeconds <= 120) ? 'block' : 'none';
+                    } else { document.getElementById('qualifying-warning').style.display = 'none'; }
+                } else {
+                    document.getElementById('current-session-box').style.display = 'block';
+                    document.getElementById('curr-category').textContent = "TRACK CLEAR";
+                    document.getElementById('curr-activity').textContent = "WAITING FOR NEXT SESSION";
+                    document.getElementById('curr-countdown').textContent = "00:00";
+                    document.getElementById('qualifying-warning').style.display = 'none';
+                }
+
+                // --- UPCOMING ---
+                const upcomingBox = document.getElementById('upcoming-modules-box');
+                if (upcomingSession) {
+                    upcomingBox.style.display = 'flex';
+                    document.getElementById('top-next-name').textContent = upcomingSession.category;
+                    document.getElementById('top-next-act').textContent = `${upcomingSession.activity} @ ${upcomingSession.startTime}`;
+
+                    const sessionStartMins = timeToMinutes(upcomingSession.startTime);
+                    const gateOpenMins = sessionStartMins - 15;
+                    const gateCloseMins = sessionStartMins - 5;
+                    const gateCloseSecs = gateCloseMins * 60;
+                    const gateOpenSecs = gateOpenMins * 60;
+
+                    document.getElementById('gate-time-open').textContent = formatTimeFromMinutes(gateOpenMins);
+                    document.getElementById('gate-time-close').textContent = formatTimeFromMinutes(gateCloseMins);
+
+                    const secsToGateOpen = gateOpenSecs - currentSecondsValue;
+                    const secsToGateClose = gateCloseSecs - currentSecondsValue;
+
+                    const gatePanel = document.getElementById('gate-panel');
+                    const gateStatusTxt = document.getElementById('gate-status-text');
+                    const gateTimerTxt = document.getElementById('gate-countdown-timer');
+
+                    let panelClass = "";
+                    if (secsToGateOpen > 0) {
+                        gateStatusTxt.textContent = "OPENS IN"; gateTimerTxt.textContent = formatSecondsToMMSS(secsToGateOpen); panelClass = "";
+                    } else if (secsToGateClose > 0) {
+                        gateStatusTxt.textContent = "CLOSES IN"; gateTimerTxt.textContent = formatSecondsToMMSS(secsToGateClose);
+                        if (secsToGateClose <= 10) panelClass = "gate-flash-fast";
+                        else if (secsToGateClose <= 300) {
+                            let m30 = secsToGateClose % 30;
+                            if (m30 === 0 || m30 >= 28) panelClass = "gate-flash-red"; else panelClass = "gate-open-solid";
+                        } else panelClass = "gate-open-solid";
+                    } else {
+                        gateStatusTxt.textContent = "CLOSED"; gateTimerTxt.textContent = "00:00"; panelClass = "gate-closed";
+                    }
+                    gatePanel.className = `upcoming-right ${panelClass}`;
+                } else {
+                    upcomingBox.style.display = 'none';
+                }
+
+                // --- BOTTOM TICKER LOGIC ---
+                let customNoteObj = null;
+                try { customNoteObj = JSON.parse(localStorage.getItem('custom_announcement')); } catch(e) {}
+                
+                const isGateNoteEnabled = localStorage.getItem('gate_note_enabled') !== 'false';
+                const cycleSec = currentSecondsValue % 300; 
+                const tickerContainer = document.getElementById('bottom-ticker-box');
+                const tickerLabel = document.getElementById('ticker-label');
+                const tickerElem = document.getElementById('ticker-dynamic-text');
+
+                let tickerHtml = "";
+                let showAnnouncement = false;
+
+                if (customNoteObj && customNoteObj.text) {
+                    const currentUnix = Math.floor(Date.now() / 1000);
+                    const ageSec = currentUnix - customNoteObj.timestamp;
+                    if (ageSec < 60 || cycleSec >= 240) { showAnnouncement = true; }
+                }
+
+                if (showAnnouncement) {
+                    tickerContainer.classList.add('announcement-active');
+                    tickerLabel.textContent = "ANNOUNCEMENT";
+                    let textStr = `[${customNoteObj.time}] ${customNoteObj.text}`;
+                    tickerHtml = `📢 <span class="highlight-yellow">${textStr}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 📢 <span class="highlight-yellow">${textStr}</span>`;
+                } else {
+                    tickerContainer.classList.remove('announcement-active');
+                    tickerLabel.textContent = "NOTE";
+                    
+                    let prefix = upcomingSession ? `NEXT: <span class="highlight-blue">${upcomingSession.category}</span> | ` : "";
+                    let noteContent = isGateNoteEnabled ? GATE_NOTE_DEFAULT : "";
+                    
+                    if(noteContent === "") {
+                        tickerHtml = `${prefix} &nbsp;&nbsp;&nbsp;&nbsp; ${prefix}`;
+                    } else {
+                        tickerHtml = `${prefix}<span class="highlight-yellow">${noteContent}</span> &nbsp;&nbsp;&nbsp;&nbsp; ${prefix}<span class="highlight-yellow">${noteContent}</span>`;
+                    }
+                }
+
+                if (tickerElem.dataset.lastContent !== tickerHtml) {
+                    tickerElem.innerHTML = tickerHtml;
+                    tickerElem.dataset.lastContent = tickerHtml;
+                }
+            } catch (err) {
+                console.error("Dashboard update error prevented crash:", err);
             }
         }
     </script>
