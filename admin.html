@@ -16,6 +16,8 @@
         input[type="text"], input[type="time"] { width: 100%; background-color: #0a0a0c; border: 1px solid #444; color: #fff; padding: 12px; border-radius: 4px; font-size: 0.95rem; margin-bottom: 15px; }
         .btn { background-color: #ffcc00; color: #000; border: none; padding: 12px 24px; border-radius: 4px; font-weight: bold; cursor: pointer; text-transform: uppercase; width: 100%; font-size: 1rem; transition: background 0.2s; }
         .btn:hover { background-color: #e6b800; }
+        .btn-clear { background-color: #444; color: #fff; margin-top: 10px;}
+        .btn-clear:hover { background-color: #E43138; }
         .status-msg { margin-top: 15px; font-weight: bold; font-size: 0.9rem; text-align: center; }
         
         .test-box { border-color: #E43138; }
@@ -26,6 +28,15 @@
         .note-box h1 { color: #2196f3; border-bottom-color: #2196f3; }
         .note-box .btn { background-color: #2196f3; color: #fff; }
         .note-box .btn:hover { background-color: #1976d2; }
+
+        /* History List */
+        .history-list { margin-top: 20px; background: #0a0a0c; border: 1px solid #333; border-radius: 4px; max-height: 150px; overflow-y: auto; padding: 10px;}
+        .history-item { padding: 8px; border-bottom: 1px dashed #333; font-size: 0.9rem; display: flex; justify-content: space-between; align-items: flex-start;}
+        .history-item:last-child { border-bottom: none; }
+        .history-time { color: #2196f3; font-weight: bold; margin-right: 10px;}
+        .history-text { color: #ccc; flex: 1; }
+        .btn-reuse { background: transparent; color: #ffcc00; border: 1px solid #ffcc00; padding: 2px 8px; border-radius: 4px; cursor: pointer; font-size: 0.75rem; margin-left: 10px;}
+        .btn-reuse:hover { background: #ffcc00; color: #000; }
 
         #auth-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #0c0c0e; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; }
         .auth-card { background: #141418; padding: 40px; border-radius: 8px; text-align: center; border: 1px solid #2e2e38; max-width: 400px; }
@@ -46,7 +57,6 @@
         </div>
     </div>
 
-    <!-- MAIN DATA SOURCE PANEL -->
     <div class="admin-box">
         <h1>Live Setup Panel</h1>
         <div class="user-info">
@@ -61,19 +71,22 @@
         <div class="status-msg" id="admin-status"></div>
     </div>
 
-    <!-- CUSTOM ANNOUNCEMENT PANEL -->
     <div class="admin-box note-box">
         <h1>📢 Track Announcement</h1>
-        <p>Enter a custom note to display on the dashboard ticker. This will override the default Gate Note for <strong>1 minute, every 5 minutes</strong> automatically.</p>
+        <p>Send an urgent message to the Dashboard. It will be <strong>forced to show immediately for 1 minute</strong>, and then repeat every 5 minutes.</p>
         <div class="input-group">
             <label>Custom Announcement Note</label>
             <input type="text" id="custom-note" placeholder="E.g., All Junior MAX drivers please report to briefing room.">
-            <button class="btn" onclick="saveAnnouncement()">Update Announcement</button>
+            <button class="btn" onclick="saveAnnouncement()">🚀 Broadcast Now</button>
+            <button class="btn btn-clear" onclick="clearAnnouncement()">✖ Clear / Stop Announcing</button>
         </div>
         <div class="status-msg" id="note-status"></div>
+
+        <h3 style="color:#2196f3; font-size:0.9rem; margin-top:20px; border-bottom:1px solid #333; padding-bottom:5px;">Announcement History</h3>
+        <div class="history-list" id="history-container">
+            </div>
     </div>
 
-    <!-- TEST MODE PANEL -->
     <div class="admin-box test-box">
         <h1>⚙️ Simulate Time</h1>
         <p>Control the time displayed on the dashboard to test Gate flashing rules and Marquee rotations.</p>
@@ -90,13 +103,13 @@
 
     <script>
         const ALLOWED_STAFF = ["your-email@gmail.com", "staff1@gmail.com", "racecontrol@gmail.com"];
-
         setTimeout(bypassAuth, 500); 
 
         function bypassAuth() {
             document.getElementById('auth-overlay').style.display = 'none';
             document.getElementById('user-email').textContent = "test-staff@gmail.com";
             loadSettings();
+            renderHistory();
         }
         
         function handleCredentialResponse(response) {}
@@ -104,9 +117,6 @@
         function loadSettings() {
             const savedUrl = localStorage.getItem('google_sheet_csv_url');
             if (savedUrl) document.getElementById('sheet-url').value = savedUrl;
-
-            const savedNote = localStorage.getItem('custom_announcement');
-            if (savedNote) document.getElementById('custom-note').value = savedNote;
 
             const mode = localStorage.getItem('sim_mode') || 'real';
             const time = localStorage.getItem('sim_time') || '13:54';
@@ -117,30 +127,78 @@
         function saveNewSource() {
             const url = document.getElementById('sheet-url').value.trim();
             const statusBox = document.getElementById('admin-status');
-            
             if (!url) {
                 localStorage.removeItem('google_sheet_csv_url');
                 statusBox.textContent = "Cleared data source. Reverted to mock data.";
                 statusBox.style.color = "#ffcc00";
                 return;
             }
-            if (!url.includes("output=csv") && !url.includes(".csv")) {
-                statusBox.textContent = "❌ ERROR: URL must be a Published CSV format link.";
-                statusBox.style.color = "#E43138";
-                return;
-            }
             localStorage.setItem('google_sheet_csv_url', url);
-            statusBox.textContent = "✔ Live Source Broadcasted Successfully! (Please Refresh Dashboard to test)";
+            statusBox.textContent = "✔ Live Source Broadcasted Successfully! (Check Dashboard)";
             statusBox.style.color = "#00e676";
         }
 
         function saveAnnouncement() {
-            const note = document.getElementById('custom-note').value.trim();
-            localStorage.setItem('custom_announcement', note);
+            const noteText = document.getElementById('custom-note').value.trim();
+            if (!noteText) return alert("Please enter an announcement text.");
+            
+            const now = new Date();
+            const timeStr = String(now.getHours()).padStart(2, '0') + ":" + String(now.getMinutes()).padStart(2, '0');
+            const payload = {
+                text: noteText,
+                time: timeStr,
+                timestamp: Math.floor(Date.now() / 1000)
+            };
+
+            localStorage.setItem('custom_announcement', JSON.stringify(payload));
+            
+            // Save to history
+            let history = JSON.parse(localStorage.getItem('announcement_history') || "[]");
+            history.unshift(payload); // add to top
+            if(history.length > 20) history.pop(); // keep last 20
+            localStorage.setItem('announcement_history', JSON.stringify(history));
+
             const statusBox = document.getElementById('note-status');
-            statusBox.textContent = note ? "✔ Announcement broadcasted! Check Dashboard." : "✔ Announcement cleared (Running default rules only).";
+            statusBox.textContent = "✔ Broadcasted! Will display immediately for 1 min.";
             statusBox.style.color = "#00e676";
-            setTimeout(() => { statusBox.textContent = ""; }, 3000);
+            setTimeout(() => { statusBox.textContent = ""; }, 4000);
+
+            document.getElementById('custom-note').value = ""; // clear input
+            renderHistory();
+        }
+
+        function clearAnnouncement() {
+            localStorage.removeItem('custom_announcement');
+            const statusBox = document.getElementById('note-status');
+            statusBox.textContent = "✔ Announcement stopped. Dashboard returned to normal Note.";
+            statusBox.style.color = "#ffcc00";
+            setTimeout(() => { statusBox.textContent = ""; }, 4000);
+        }
+
+        function renderHistory() {
+            const container = document.getElementById('history-container');
+            const history = JSON.parse(localStorage.getItem('announcement_history') || "[]");
+            container.innerHTML = "";
+            if (history.length === 0) {
+                container.innerHTML = "<div style='color:#666; font-size:0.8rem;'>No history yet.</div>";
+                return;
+            }
+            history.forEach(item => {
+                const div = document.createElement('div');
+                div.className = "history-item";
+                div.innerHTML = `
+                    <div>
+                        <span class="history-time">[${item.time}]</span>
+                        <span class="history-text">${item.text}</span>
+                    </div>
+                    <button class="btn-reuse" onclick="reuseNote('${item.text.replace(/'/g, "\\'")}')">Reuse</button>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function reuseNote(text) {
+            document.getElementById('custom-note').value = text;
         }
 
         function updateSimMode() {
@@ -148,7 +206,6 @@
             const time = document.getElementById('sim-time-input').value;
             localStorage.setItem('sim_mode', mode);
             localStorage.setItem('sim_time', time);
-            
             const statusBox = document.getElementById('sim-status');
             statusBox.textContent = mode === 'sim' ? `Dashboard SIMULATING time at ${time}.` : "Dashboard returned to REAL time.";
             if (mode !== 'sim') statusBox.style.color = "#a0a0ab";
