@@ -5,18 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Race Live Schedule & Countdown Dashboard</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #0a0a0c;
             color: #ffffff;
-            overflow: hidden; /* Prevent scrolling for TV display */
-            padding: 20px 20px 80px 20px;
+            overflow: hidden;
+            padding: 20px;
             height: 100vh;
             display: flex;
             flex-direction: column;
@@ -32,254 +27,122 @@
             flex-direction: column;
         }
 
-        /* Full Screen Button (Faded, Top Right) */
+        /* Full Screen Button */
         .fullscreen-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 8px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            opacity: 0.2;
-            transition: opacity 0.3s, background 0.3s;
-            z-index: 2000;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            position: fixed; top: 20px; right: 20px; background: rgba(255, 255, 255, 0.1); color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2); padding: 8px 12px; border-radius: 6px;
+            cursor: pointer; opacity: 0.2; transition: opacity 0.3s, background 0.3s; z-index: 2000;
+            font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;
         }
-        .fullscreen-btn:hover {
-            opacity: 1;
-            background: rgba(255, 255, 255, 0.2);
-        }
+        .fullscreen-btn:hover { opacity: 1; background: rgba(255, 255, 255, 0.2); }
 
         /* Header Styles */
         header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 3px solid #ffcc00;
-            padding-bottom: 15px;
-            margin-bottom: 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 3px solid #ffcc00; padding-bottom: 15px; margin-bottom: 20px;
         }
-
-        .logo-title h1 {
-            font-size: 2.5rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #ffffff;
-        }
-        
-        .logo-title span {
-            color: #ffcc00;
-        }
-
-        .local-time-container {
-            text-align: right;
-            padding-right: 80px; /* Space for fullscreen button */
-        }
-
-        .time-label {
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            color: #8a8a93;
-            letter-spacing: 1px;
-        }
-
+        .logo-title h1 { font-size: 2.5rem; text-transform: uppercase; letter-spacing: 2px; color: #ffffff; }
+        .logo-title span { color: #ffcc00; }
+        .local-time-container { text-align: right; padding-right: 80px; }
+        .time-label { font-size: 0.9rem; text-transform: uppercase; color: #8a8a93; letter-spacing: 1px; }
         .digital-clock {
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 3.5rem;
-            font-weight: bold;
-            color: #ffcc00;
-            text-shadow: 0 0 10px rgba(255, 204, 0, 0.3);
-            line-height: 1;
+            font-family: 'Courier New', Courier, monospace; font-size: 3.5rem; font-weight: bold;
+            color: #ffcc00; text-shadow: 0 0 10px rgba(255, 204, 0, 0.3); line-height: 1;
         }
 
-        /* Main Display Area */
-        .main-display {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+        /* TOP MODULES (Ticker & Gate Status) */
+        .top-modules {
+            display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px;
         }
 
+        /* Ticker Style */
+        .ticker-container {
+            width: 100%; height: 60px; background-color: #141418; border: 2px solid #2196f3;
+            display: flex; align-items: center; overflow: hidden; border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+        }
+        .ticker-label {
+            background-color: #2196f3; color: #ffffff; font-weight: bold; text-transform: uppercase;
+            padding: 0 30px; height: 100%; display: flex; align-items: center; white-space: nowrap;
+            z-index: 2; font-size: 1.4rem; letter-spacing: 1.5px; box-shadow: 5px 0 15px rgba(0,0,0,0.7);
+        }
+        .ticker-content-wrapper { flex: 1; overflow: hidden; display: flex; align-items: center; height: 100%; }
+        .ticker-text {
+            white-space: nowrap; padding-left: 100%; display: inline-block; font-size: 1.8rem;
+            font-weight: 600; color: #ffffff; text-transform: uppercase; animation: ticker-move 25s linear infinite;
+        }
+        .ticker-text span.highlight-blue { color: #2196f3; font-weight: 800; }
+        .ticker-text span.highlight-yellow { color: #ffcc00; font-weight: 800; }
+        .ticker-text span.highlight-red { color: #E43138; font-weight: 800; }
+        @keyframes ticker-move { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
+
+        /* Gate Status Panel */
+        .gate-panel {
+            display: flex; justify-content: space-between; align-items: center; background-color: #1a1a24;
+            border: 2px solid #555; border-radius: 8px; padding: 15px 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+            transition: all 0.3s;
+        }
+        .gate-title { font-size: 1.6rem; font-weight: 800; color: #ffcc00; text-transform: uppercase; letter-spacing: 1px; }
+        .gate-times { font-size: 1.3rem; color: #a0a0ab; margin-left: 20px; }
+        .gate-times strong { color: #fff; }
+        .gate-timer-box { display: flex; align-items: center; gap: 15px; }
+        .gate-status-text { font-size: 1.4rem; font-weight: 700; color: #fff; text-transform: uppercase; }
+        .gate-countdown-timer {
+            font-family: 'Courier New', Courier, monospace; font-size: 3.5rem; font-weight: 900; color: #a0a0ab; line-height: 1;
+        }
+
+        /* Gate Panel Dynamic States */
+        .gate-open-solid { border-color: #00e676; }
+        .gate-open-solid .gate-countdown-timer { color: #00e676; text-shadow: 0 0 15px rgba(0, 230, 118, 0.4); }
+        .gate-closed { border-color: #E43138; opacity: 0.7; }
+        .gate-closed .gate-countdown-timer { color: #E43138; }
+        
+        .gate-flash-red {
+            background-color: #E43138 !important; border-color: #ff5258 !important;
+            box-shadow: 0 0 30px rgba(229, 49, 56, 0.8) !important;
+        }
+        .gate-flash-red * { color: #ffffff !important; text-shadow: none !important;}
+        
+        .gate-flash-fast { animation: gate-fast-flash 0.5s infinite alternate !important; border-color: #ff5258 !important; }
+        @keyframes gate-fast-flash {
+            from { background-color: #E43138; box-shadow: 0 0 30px rgba(229, 49, 56, 0.9); }
+            to { background-color: #1a1a24; box-shadow: none; }
+        }
+
+        /* Main Display (Current Session) */
+        .main-display { flex: 1; display: flex; flex-direction: column; justify-content: center; }
         .session-card {
-            background: linear-gradient(145deg, #111e16, #141418);
-            border-left: 12px solid #00e676;
-            border-radius: 12px;
-            padding: 40px;
-            box-shadow: 0 15px 35px rgba(0, 230, 118, 0.15);
-            position: relative;
+            background: linear-gradient(145deg, #111e16, #141418); border-left: 12px solid #00e676;
+            border-radius: 12px; padding: 40px; box-shadow: 0 15px 35px rgba(0, 230, 118, 0.15); position: relative;
         }
-
         .session-status {
-            display: inline-block;
-            padding: 6px 16px;
-            border-radius: 4px;
-            font-size: 1rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 20px;
-            background-color: #00e676;
-            color: #000;
+            display: inline-block; padding: 6px 16px; border-radius: 4px; font-size: 1rem;
+            font-weight: bold; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 20px;
+            background-color: #00e676; color: #000;
         }
-
-        .category-name {
-            font-size: 4.5rem;
-            font-weight: 900;
-            color: #ffffff;
-            line-height: 1.1;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .activity-name {
-            font-size: 2.8rem;
-            color: #ffcc00;
-            font-weight: 700;
-            margin-top: 10px;
-            text-transform: uppercase;
-        }
-
+        .category-name { font-size: 4.5rem; font-weight: 900; color: #ffffff; line-height: 1.1; text-transform: uppercase; letter-spacing: 1px; }
+        .activity-name { font-size: 2.8rem; color: #ffcc00; font-weight: 700; margin-top: 10px; text-transform: uppercase; }
+        
         .countdown-box {
-            margin-top: 35px;
-            background-color: rgba(0, 0, 0, 0.5);
-            padding: 30px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border: 1px solid #222;
+            margin-top: 35px; background-color: rgba(0, 0, 0, 0.5); padding: 30px; border-radius: 8px;
+            display: flex; align-items: center; justify-content: space-between; border: 1px solid #222;
         }
+        .countdown-label { font-size: 2rem; text-transform: uppercase; color: #a0a0ab; font-weight: 600; letter-spacing: 1px; }
+        .countdown-timer { font-family: 'Courier New', Courier, monospace; font-size: 7.5rem; font-weight: bold; color: #00e676; text-shadow: 0 0 20px rgba(0, 230, 118, 0.4); line-height: 1; }
 
-        .countdown-label {
-            font-size: 2rem;
-            text-transform: uppercase;
-            color: #a0a0ab;
-            font-weight: 600;
-            letter-spacing: 1px;
-        }
-
-        .countdown-timer {
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 7.5rem;
-            font-weight: bold;
-            color: #00e676;
-            text-shadow: 0 0 20px rgba(0, 230, 118, 0.4);
-            line-height: 1;
-        }
-
-        /* 2-Minute Warning Alert Style (Updated to new RED: #E43138) */
         .qualifying-warning-box {
-            margin-top: 25px;
-            background-color: #E43138;
-            color: #ffffff;
-            padding: 25px;
-            border-radius: 8px;
-            font-weight: bold;
-            text-align: center;
-            font-size: 1.8rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 0 20px rgba(229, 49, 56, 0.6);
-            animation: pulse-red 1s infinite alternate;
-            display: none;
+            margin-top: 25px; background-color: #E43138; color: #ffffff; padding: 25px; border-radius: 8px;
+            font-weight: bold; text-align: center; font-size: 1.8rem; text-transform: uppercase; letter-spacing: 1px;
+            box-shadow: 0 0 20px rgba(229, 49, 56, 0.6); animation: pulse-red 1s infinite alternate; display: none;
         }
-
         @keyframes pulse-red {
             from { background-color: #E43138; box-shadow: 0 0 15px rgba(229, 49, 56, 0.6); }
             to { background-color: #ff5258; box-shadow: 0 0 30px rgba(229, 49, 56, 0.9); }
         }
 
-        /* --- TICKER / MARQUEE --- */
-        .ticker-container {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 70px;
-            background-color: #141418;
-            border-top: 3px solid #2196f3;
-            display: flex;
-            align-items: center;
-            overflow: hidden;
-            z-index: 1000;
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.8);
-            transition: background-color 0.3s, border-top-color 0.3s;
-        }
-
-        /* 1-Minute Urgent Blink Class (Updated to new RED: #E43138) */
-        .ticker-container.urgent-blink {
-            animation: urgent-ticker-pulse 1s infinite alternate;
-            border-top: 3px solid #E43138;
-        }
-
-        @keyframes urgent-ticker-pulse {
-            from { background-color: #4a1012; } /* Dark red */
-            to { background-color: #E43138; } /* Primary requested red */
-        }
-
-        .ticker-label {
-            background-color: #2196f3;
-            color: #ffffff;
-            font-weight: bold;
-            text-transform: uppercase;
-            padding: 0 30px;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            white-space: nowrap;
-            z-index: 2;
-            font-size: 1.4rem;
-            letter-spacing: 1.5px;
-            box-shadow: 5px 0 15px rgba(0,0,0,0.7);
-        }
-
-        .urgent-blink .ticker-label {
-            background-color: #E43138; /* Match urgent red */
-        }
-
-        .ticker-content-wrapper {
-            flex: 1;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            height: 100%;
-        }
-
-        .ticker-text {
-            white-space: nowrap;
-            padding-left: 100%;
-            display: inline-block;
-            font-size: 1.8rem;
-            font-weight: 600;
-            color: #ffffff;
-            text-transform: uppercase;
-            animation: ticker-move 25s linear infinite;
-        }
-
-        .ticker-text span.highlight-blue { color: #2196f3; font-weight: 800; }
-        .ticker-text span.highlight-yellow { color: #ffcc00; font-weight: 800; }
-        
-        .urgent-blink .ticker-text span.highlight-blue { color: #ffffff; }
-
-        @keyframes ticker-move {
-            0% { transform: translate3d(0, 0, 0); }
-            100% { transform: translate3d(-100%, 0, 0); }
-        }
-
         .no-session {
-            text-align: center;
-            padding: 80px;
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #8a8a93;
-            background-color: #141418;
-            border-radius: 12px;
-            border: 2px dashed #444;
+            text-align: center; padding: 80px; font-size: 2.5rem; font-weight: bold;
+            color: #8a8a93; background-color: #141418; border-radius: 12px; border: 2px dashed #444;
         }
     </style>
 </head>
@@ -298,17 +161,42 @@
             </div>
         </header>
 
+        <!-- NEW TOP MODULES -->
+        <div class="top-modules" id="upcoming-modules-box" style="display: none;">
+            
+            <!-- Ticker -->
+            <div class="ticker-container">
+                <div class="ticker-label">NEXT SESSION</div>
+                <div class="ticker-content-wrapper">
+                    <div class="ticker-text" id="ticker-dynamic-text">Loading...</div>
+                </div>
+            </div>
+
+            <!-- Service Park Gate Status -->
+            <div class="gate-panel" id="gate-panel">
+                <div style="display: flex; align-items: center;">
+                    <div class="gate-title">SERVICE PARK GATE</div>
+                    <div class="gate-times">
+                        OPEN: <strong id="gate-time-open">--:--</strong> &nbsp;|&nbsp; 
+                        CLOSE: <strong id="gate-time-close">--:--</strong>
+                    </div>
+                </div>
+                <div class="gate-timer-box">
+                    <span class="gate-status-text" id="gate-status-text">STATUS</span>
+                    <span class="gate-countdown-timer" id="gate-countdown-timer">00:00</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN ON TRACK MODULE -->
         <main class="main-display">
             <div id="current-session-box" class="session-card">
                 <span class="session-status">ON TRACK NOW</span>
-                
                 <div class="category-name" id="curr-category">LOADING...</div>
                 <div class="activity-name" id="curr-activity">-</div>
-                
                 <div class="qualifying-warning-box" id="qualifying-warning">
                     ⚠️ WARNING: Drivers must be on track 2 minutes after Qualifying Practice started!
                 </div>
-
                 <div class="countdown-box">
                     <span class="countdown-label">Time Remaining</span>
                     <span class="countdown-timer" id="curr-countdown">00:00</span>
@@ -321,52 +209,28 @@
         </main>
     </div>
 
-    <div class="ticker-container" id="upcoming-ticker-box">
-        <div class="ticker-label">NEXT SESSION</div>
-        <div class="ticker-content-wrapper">
-            <div class="ticker-text" id="ticker-dynamic-text">
-                Loading upcoming race data...
-            </div>
-        </div>
-    </div>
-
     <script>
         function toggleFullScreen() {
             if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(err => {
-                    console.log(`Error attempting to enable fullscreen: ${err.message}`);
-                });
+                document.documentElement.requestFullscreen().catch(err => { console.log(`Error: ${err.message}`); });
                 document.getElementById('fs-btn').textContent = "✖ Exit Fullscreen";
             } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                    document.getElementById('fs-btn').textContent = "⛶ Fullscreen";
-                }
+                if (document.exitFullscreen) { document.exitFullscreen(); document.getElementById('fs-btn').textContent = "⛶ Fullscreen"; }
             }
         }
 
         const mockSchedule = [
             { startTime: "08:00", endTime: "08:20", category: "MICRO MAX / MINI MAX", activity: "REGISTRATION" },
-            { startTime: "08:30", endTime: "08:50", category: "JUNIOR MAX", activity: "REGISTRATION" },
-            { startTime: "08:50", endTime: "09:10", category: "SENIOR MAX / MASTERS", activity: "REGISTRATION" },
-            { startTime: "12:15", endTime: "12:45", category: "LUNCH BREAK", activity: "LUNCH BREAK" },
-            { startTime: "12:50", endTime: "13:20", category: "DRIVER BRIEFING", activity: "ALL DRIVERS" },
-            { startTime: "13:25", endTime: "13:40", category: "MICRO MAX / MICRO ROOKIE", activity: "OFFICIAL PRACTICE #1" },
-            { startTime: "13:45", endTime: "14:00", category: "MINI MAX / MINI ROOKIE", activity: "OFFICIAL PRACTICE #1" },
-            { startTime: "14:05", endTime: "14:20", category: "JUNIOR MAX", activity: "OFFICIAL PRACTICE #1" },
-            { startTime: "14:25", endTime: "14:40", category: "SENIOR MAX / MASTERS", activity: "OFFICIAL PRACTICE #1" },
-            { startTime: "16:05", endTime: "16:11", category: "MICRO MAX / MICRO ROOKIE", activity: "QUALIFYING PRACTICE" },
-            { startTime: "16:20", endTime: "16:26", category: "MINI MAX / MINI ROOKIE", activity: "QUALIFYING PRACTICE" }
+            { startTime: "14:00", endTime: "14:20", category: "JUNIOR MAX", activity: "OFFICIAL PRACTICE #1" }
         ];
 
         let activeSchedule = [...mockSchedule];
-        const GATE_NOTE = "⚠️ NOTE: Start servicing park gate will be OPEN 15 MINS before the start of the categories and will be CLOSE 5 MINS before the start of the categories.";
+        const GATE_NOTE_DEFAULT = "⚠️ NOTE: Start servicing park gate will be OPEN 15 MINS before the start of the categories and will be CLOSE 5 MINS before the start of the categories.";
 
         window.addEventListener('DOMContentLoaded', () => {
             const savedUrl = localStorage.getItem('google_sheet_csv_url');
             if (savedUrl) fetchLiveSheetData(savedUrl);
             
-            // Listen for changes from admin panel (Data source OR Test mode changes)
             window.addEventListener('storage', (e) => {
                 if (e.key === 'google_sheet_csv_url') {
                     if (e.newValue) fetchLiveSheetData(e.newValue);
@@ -386,25 +250,36 @@
                 const parsedSessions = [];
                 
                 for (let i = 0; i < lines.length; i++) {
-                    const cols = lines[i].split(',').map(c => c.replace(/^"|"$/g, '').trim());
+                    if (!lines[i].trim()) continue;
+                    let cols = []; let inQuote = false; let value = '';
+                    for (let ch of lines[i]) {
+                        if (inQuote) { if (ch === '"') inQuote = false; else value += ch; } 
+                        else { if (ch === '"') inQuote = true; else if (ch === ',') { cols.push(value.trim()); value = ''; } else value += ch; }
+                    }
+                    cols.push(value.trim());
+
                     if (cols.length >= 5) {
-                        const startTime = cols[1];
-                        const endTime = cols[2];
-                        const category = cols[3];
-                        const activity = cols[4];
+                        let startTime = cols[1]; let endTime = cols[2]; let category = cols[3]; let activity = cols[4];
+                        if (startTime && startTime.split(':').length === 3) startTime = startTime.split(':').slice(0, 2).join(':');
+                        if (endTime && endTime.split(':').length === 3) endTime = endTime.split(':').slice(0, 2).join(':');
+
                         if (/^\d{1,2}:\d{2}$/.test(startTime) && /^\d{1,2}:\d{2}$/.test(endTime)) {
                             parsedSessions.push({ startTime, endTime, category, activity });
                         }
                     }
                 }
                 if (parsedSessions.length > 0) activeSchedule = parsedSessions;
-            } catch (e) {
-                console.error("Live fetch failed:", e);
-            }
+            } catch (e) { console.error("Live fetch failed:", e); }
+        }
+
+        function formatTimeFromMinutes(totalMinutes) {
+            if (totalMinutes < 0) totalMinutes = 1440 + totalMinutes; // Handle midnight crossing slightly
+            let h = Math.floor(totalMinutes / 60) % 24;
+            let m = totalMinutes % 60;
+            return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
         }
 
         function updateDashboard() {
-            // Read Test Mode state directly from localStorage
             const timeMode = localStorage.getItem('sim_mode') || 'real';
             let currentDisplayDate = new Date();
             
@@ -418,16 +293,13 @@
             const mins = String(currentDisplayDate.getMinutes()).padStart(2, '0');
             const secs = String(currentDisplayDate.getSeconds()).padStart(2, '0');
             
-            // Highlight clock in red if Test Mode is active
             const clockEl = document.getElementById('local-clock');
             clockEl.textContent = `${hrs}:${mins}:${secs}`;
             if (timeMode === 'sim') {
-                clockEl.style.color = "#E43138";
-                clockEl.style.textShadow = "0 0 10px rgba(229, 49, 56, 0.4)";
+                clockEl.style.color = "#E43138"; clockEl.style.textShadow = "0 0 10px rgba(229, 49, 56, 0.4)";
                 document.querySelector('.time-label').textContent = "SIMULATED TIME";
             } else {
-                clockEl.style.color = "#ffcc00";
-                clockEl.style.textShadow = "0 0 10px rgba(255, 204, 0, 0.3)";
+                clockEl.style.color = "#ffcc00"; clockEl.style.textShadow = "0 0 10px rgba(255, 204, 0, 0.3)";
                 document.querySelector('.time-label').textContent = "Local Time";
             }
 
@@ -436,7 +308,6 @@
 
             let currentSession = null;
             let upcomingSession = null;
-
             const sortedSchedule = [...activeSchedule].sort((a,b) => timeToMinutes(a.startTime) - timeToMinutes(b.startTime));
 
             for (let session of sortedSchedule) {
@@ -450,13 +321,13 @@
                 }
             }
 
+            // Fallback UI
             if (!currentSession && !upcomingSession) {
                 document.getElementById('current-session-box').style.display = 'none';
-                document.getElementById('upcoming-ticker-box').style.display = 'none';
+                document.getElementById('upcoming-modules-box').style.display = 'none';
                 document.getElementById('no-session-box').style.display = 'block';
                 return;
             }
-
             document.getElementById('no-session-box').style.display = 'none';
 
             // --- CURRENT SESSION LOGIC ---
@@ -466,18 +337,11 @@
                 document.getElementById('curr-activity').textContent = currentSession.activity;
 
                 const endSecondsTotal = timeToMinutes(currentSession.endTime) * 60;
-                const remainingSeconds = endSecondsTotal - currentSecondsValue;
-                document.getElementById('curr-countdown').textContent = formatSecondsToMMSS(remainingSeconds);
+                document.getElementById('curr-countdown').textContent = formatSecondsToMMSS(endSecondsTotal - currentSecondsValue);
 
                 if (currentSession.activity.trim().toUpperCase() === "QUALIFYING PRACTICE") {
-                    const startSecondsTotal = timeToMinutes(currentSession.startTime) * 60;
-                    const elapsedSeconds = currentSecondsValue - startSecondsTotal;
-
-                    if (elapsedSeconds >= 0 && elapsedSeconds <= 120) {
-                        document.getElementById('qualifying-warning').style.display = 'block';
-                    } else {
-                        document.getElementById('qualifying-warning').style.display = 'none';
-                    }
+                    const elapsedSeconds = currentSecondsValue - (timeToMinutes(currentSession.startTime) * 60);
+                    document.getElementById('qualifying-warning').style.display = (elapsedSeconds >= 0 && elapsedSeconds <= 120) ? 'block' : 'none';
                 } else {
                     document.getElementById('qualifying-warning').style.display = 'none';
                 }
@@ -489,31 +353,87 @@
                 document.getElementById('qualifying-warning').style.display = 'none';
             }
 
-            // --- UPCOMING TICKER LOGIC ---
-            const tickerBox = document.getElementById('upcoming-ticker-box');
+            // --- UPCOMING MODULES (Ticker & Gate Status) ---
+            const upcomingBox = document.getElementById('upcoming-modules-box');
             if (upcomingSession) {
-                tickerBox.style.display = 'flex';
+                upcomingBox.style.display = 'flex';
                 
-                const nextStartSecondsTotal = timeToMinutes(upcomingSession.startTime) * 60;
-                const secondsUntilStart = nextStartSecondsTotal - currentSecondsValue;
-                const countdownStr = formatSecondsToMMSS(secondsUntilStart);
-
-                if (secondsUntilStart <= 60 && secondsUntilStart > 0) {
-                    tickerBox.classList.add('urgent-blink');
-                } else {
-                    tickerBox.classList.remove('urgent-blink');
+                const sessionStartMins = timeToMinutes(upcomingSession.startTime);
+                const sessionStartSecs = sessionStartMins * 60;
+                
+                // 1. Ticker Logic (5 Min Cycle: 4 Min Default Note, 1 Min Custom Announcement)
+                const customNote = localStorage.getItem('custom_announcement') || "";
+                let activeNote = GATE_NOTE_DEFAULT;
+                const cycleSec = currentSecondsValue % 300; 
+                if (customNote && cycleSec >= 240) {
+                    activeNote = `📢 TRACK ANNOUNCEMENT: <span class="highlight-red">${customNote}</span>`;
                 }
 
-                const tickerHtml = `<span class="highlight-blue">${upcomingSession.category}</span> - ${upcomingSession.activity} | STARTS AT: <span class="highlight-yellow">${upcomingSession.startTime}</span> | COUNTDOWN: <span class="highlight-yellow">${countdownStr}</span> &nbsp;&nbsp;&nbsp;&nbsp; 🔴 ${GATE_NOTE} 🔴 &nbsp;&nbsp;&nbsp;&nbsp;`;
+                const sessionCountdownStr = formatSecondsToMMSS(sessionStartSecs - currentSecondsValue);
+                const tickerHtml = `<span class="highlight-blue">${upcomingSession.category}</span> - ${upcomingSession.activity} | STARTS AT: <span class="highlight-yellow">${upcomingSession.startTime}</span> | SESSION IN: <span class="highlight-yellow">${sessionCountdownStr}</span> &nbsp;&nbsp;&nbsp;&nbsp; 🔴 ${activeNote} 🔴 &nbsp;&nbsp;&nbsp;&nbsp;`;
                 
                 const tickerElem = document.getElementById('ticker-dynamic-text');
-                if (tickerElem.dataset.lastContent !== countdownStr) {
+                if (tickerElem.dataset.lastContent !== tickerHtml) {
                     tickerElem.innerHTML = tickerHtml;
-                    tickerElem.dataset.lastContent = countdownStr;
+                    tickerElem.dataset.lastContent = tickerHtml;
                 }
+
+                // 2. Gate Logic 
+                // Open = 15 mins before, Close = 5 mins before
+                const gateOpenMins = sessionStartMins - 15;
+                const gateCloseMins = sessionStartMins - 5;
+                const gateCloseSecs = gateCloseMins * 60;
+                const gateOpenSecs = gateOpenMins * 60;
+
+                document.getElementById('gate-time-open').textContent = formatTimeFromMinutes(gateOpenMins);
+                document.getElementById('gate-time-close').textContent = formatTimeFromMinutes(gateCloseMins);
+
+                const secsToGateOpen = gateOpenSecs - currentSecondsValue;
+                const secsToGateClose = gateCloseSecs - currentSecondsValue;
+
+                const gatePanel = document.getElementById('gate-panel');
+                const gateStatusTxt = document.getElementById('gate-status-text');
+                const gateTimerTxt = document.getElementById('gate-countdown-timer');
+
+                let panelClass = "";
+
+                if (secsToGateOpen > 0) {
+                    // Not Open Yet
+                    gateStatusTxt.textContent = "GATE OPENS IN";
+                    gateTimerTxt.textContent = formatSecondsToMMSS(secsToGateOpen);
+                    panelClass = ""; // default dark grey
+                } else if (secsToGateClose > 0) {
+                    // Gate is OPEN, counting down to CLOSE
+                    gateStatusTxt.textContent = "GATE OPEN - CLOSES IN";
+                    gateTimerTxt.textContent = formatSecondsToMMSS(secsToGateClose);
+                    
+                    // Flashing Rules (Warning if < 5 mins to close)
+                    if (secsToGateClose <= 10) {
+                        panelClass = "gate-flash-fast"; // Last 10s continuous blink
+                    } else if (secsToGateClose <= 300) {
+                        // Flash for 3 seconds every 30 seconds
+                        let m30 = secsToGateClose % 30;
+                        // secsToGateClose goes 300, 299, 298... 
+                        // m30 will be 0, 29, 28... -> Flash when m30 is 0, 29, 28
+                        if (m30 === 0 || m30 >= 28) {
+                            panelClass = "gate-flash-red";
+                        } else {
+                            panelClass = "gate-open-solid";
+                        }
+                    } else {
+                        panelClass = "gate-open-solid"; // Just solid green border
+                    }
+                } else {
+                    // Gate Closed
+                    gateStatusTxt.textContent = "GATE CLOSED";
+                    gateTimerTxt.textContent = "00:00";
+                    panelClass = "gate-closed";
+                }
+                
+                gatePanel.className = `gate-panel ${panelClass}`;
+
             } else {
-                tickerBox.style.display = 'none';
-                tickerBox.classList.remove('urgent-blink');
+                upcomingBox.style.display = 'none';
             }
         }
 
