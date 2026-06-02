@@ -6,55 +6,24 @@
     <title>Race Live Schedule & Countdown Dashboard</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #0a0a0c; color: #ffffff; overflow: hidden;
-            padding: 20px 20px 80px 20px; height: 100vh; display: flex;
-            flex-direction: column; position: relative;
-        }
-
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0a0a0c; color: #ffffff; overflow: hidden; padding: 20px 20px 80px 20px; height: 100vh; display: flex; flex-direction: column; position: relative; }
         .container { max-width: 1400px; margin: 0 auto; width: 100%; flex: 1; display: flex; flex-direction: column; }
-
-        /* Full Screen Button */
-        .fullscreen-btn {
-            position: fixed; top: 20px; right: 20px; background: rgba(255, 255, 255, 0.1); color: #fff;
-            border: 1px solid rgba(255, 255, 255, 0.2); padding: 8px 12px; border-radius: 6px;
-            cursor: pointer; opacity: 0.2; transition: opacity 0.3s, background 0.3s; z-index: 2000;
-            font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;
-        }
+        .fullscreen-btn { position: fixed; top: 20px; right: 20px; background: rgba(255, 255, 255, 0.1); color: #fff; border: 1px solid rgba(255, 255, 255, 0.2); padding: 8px 12px; border-radius: 6px; cursor: pointer; opacity: 0.2; transition: opacity 0.3s, background 0.3s; z-index: 2000; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
         .fullscreen-btn:hover { opacity: 1; background: rgba(255, 255, 255, 0.2); }
-
-        /* Header */
-        header {
-            display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 3px solid #ffcc00; padding-bottom: 15px; margin-bottom: 20px;
-        }
+        header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #ffcc00; padding-bottom: 15px; margin-bottom: 20px; }
         .logo-title h1 { font-size: 2.5rem; text-transform: uppercase; letter-spacing: 2px; color: #ffffff; }
         .logo-title span { color: #ffcc00; }
         .local-time-container { text-align: right; padding-right: 80px; }
         .time-label { font-size: 0.9rem; text-transform: uppercase; color: #8a8a93; letter-spacing: 1px; }
-        .digital-clock {
-            font-family: 'Courier New', Courier, monospace; font-size: 3.5rem; font-weight: bold;
-            color: #ffcc00; text-shadow: 0 0 10px rgba(255, 204, 0, 0.3); line-height: 1;
-        }
+        .digital-clock { font-family: 'Courier New', Courier, monospace; font-size: 3.5rem; font-weight: bold; color: #ffcc00; text-shadow: 0 0 10px rgba(255, 204, 0, 0.3); line-height: 1; }
 
-        /* TOP BAR: NEXT SESSION + GATE STATUS */
-        .upcoming-top-bar {
-            display: flex; background-color: #141418; border: 2px solid #333; border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.5); overflow: hidden; margin-bottom: 25px; min-height: 110px;
-        }
-        .upcoming-left {
-            padding: 15px 25px; background: linear-gradient(135deg, #1e88e5, #1565c0); color: #fff;
-            display: flex; flex-direction: column; justify-content: center; min-width: 35%; border-right: 3px solid #0a0a0c;
-        }
+        /* TOP BAR */
+        .upcoming-top-bar { display: flex; background-color: #141418; border: 2px solid #333; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.5); overflow: hidden; margin-bottom: 25px; min-height: 110px; }
+        .upcoming-left { padding: 15px 25px; background: linear-gradient(135deg, #1e88e5, #1565c0); color: #fff; display: flex; flex-direction: column; justify-content: center; min-width: 35%; border-right: 3px solid #0a0a0c; }
         .upcoming-left-label { font-size: 1rem; font-weight: bold; color: rgba(255,255,255,0.8); letter-spacing: 2px; margin-bottom: 5px; }
         .top-next-name { font-size: 2.2rem; font-weight: 900; text-transform: uppercase; line-height: 1; margin-bottom: 5px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
         .top-next-act { font-size: 1.2rem; font-weight: 700; color: #ffcc00; text-transform: uppercase; }
-        
-        .upcoming-right {
-            padding: 15px 30px; flex: 1; display: flex; justify-content: space-between; align-items: center;
-            transition: all 0.3s ease; background-color: #1a1a24;
-        }
+        .upcoming-right { padding: 15px 30px; flex: 1; display: flex; justify-content: space-between; align-items: center; transition: all 0.3s ease; background-color: #1a1a24; }
         .gate-title { font-size: 1.6rem; font-weight: 800; color: #a0a0ab; text-transform: uppercase; letter-spacing: 1px; }
         .gate-times { font-size: 1.2rem; color: #8a8a93; margin-top: 5px; }
         .gate-times strong { color: #fff; font-size: 1.4rem;}
@@ -62,7 +31,6 @@
         .gate-status-text { font-size: 1.3rem; font-weight: 800; color: #fff; text-transform: uppercase; display: block;}
         .gate-countdown-timer { font-family: 'Courier New', Courier, monospace; font-size: 4rem; font-weight: 900; color: #a0a0ab; line-height: 1; }
 
-        /* Gate Panel Dynamic States */
         .gate-open-solid { border-bottom: 5px solid #00e676; background-color: #122217; }
         .gate-open-solid .gate-title { color: #00e676; }
         .gate-open-solid .gate-countdown-timer { color: #00e676; text-shadow: 0 0 15px rgba(0, 230, 118, 0.4); }
@@ -73,62 +41,29 @@
         .gate-flash-fast { animation: gate-fast-flash 0.5s infinite alternate !important; }
         @keyframes gate-fast-flash { from { background-color: #E43138; box-shadow: inset 0 0 30px rgba(0,0,0,0.5); } to { background-color: #1a1a24; box-shadow: none; } }
 
-        /* MAIN ON TRACK MODULE */
+        /* MAIN */
         .main-display { flex: 1; display: flex; flex-direction: column; justify-content: center; }
-        .session-card {
-            background: linear-gradient(145deg, #111e16, #141418); border-left: 12px solid #00e676;
-            border-radius: 12px; padding: 40px; box-shadow: 0 15px 35px rgba(0, 230, 118, 0.15); position: relative;
-        }
-        .session-status {
-            display: inline-block; padding: 6px 16px; border-radius: 4px; font-size: 1rem;
-            font-weight: bold; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 20px;
-            background-color: #00e676; color: #000;
-        }
+        .session-card { background: linear-gradient(145deg, #111e16, #141418); border-left: 12px solid #00e676; border-radius: 12px; padding: 40px; box-shadow: 0 15px 35px rgba(0, 230, 118, 0.15); position: relative; }
+        .session-status { display: inline-block; padding: 6px 16px; border-radius: 4px; font-size: 1rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 20px; background-color: #00e676; color: #000; }
         .category-name { font-size: 4.5rem; font-weight: 900; color: #ffffff; line-height: 1.1; text-transform: uppercase; letter-spacing: 1px; }
         .activity-name { font-size: 2.8rem; color: #ffcc00; font-weight: 700; margin-top: 10px; text-transform: uppercase; }
-        
-        .countdown-box {
-            margin-top: 35px; background-color: rgba(0, 0, 0, 0.5); padding: 30px; border-radius: 8px;
-            display: flex; align-items: center; justify-content: space-between; border: 1px solid #222;
-        }
+        .countdown-box { margin-top: 35px; background-color: rgba(0, 0, 0, 0.5); padding: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; border: 1px solid #222; }
         .countdown-label { font-size: 2rem; text-transform: uppercase; color: #a0a0ab; font-weight: 600; letter-spacing: 1px; }
         .countdown-timer { font-family: 'Courier New', Courier, monospace; font-size: 7.5rem; font-weight: bold; color: #00e676; text-shadow: 0 0 20px rgba(0, 230, 118, 0.4); line-height: 1; }
-
-        .qualifying-warning-box {
-            margin-top: 25px; background-color: #E43138; color: #ffffff; padding: 25px; border-radius: 8px;
-            font-weight: bold; text-align: center; font-size: 1.8rem; text-transform: uppercase; letter-spacing: 1px;
-            box-shadow: 0 0 20px rgba(229, 49, 56, 0.6); animation: pulse-red 1s infinite alternate; display: none;
-        }
+        .qualifying-warning-box { margin-top: 25px; background-color: #E43138; color: #ffffff; padding: 25px; border-radius: 8px; font-weight: bold; text-align: center; font-size: 1.8rem; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 0 20px rgba(229, 49, 56, 0.6); animation: pulse-red 1s infinite alternate; display: none; }
         @keyframes pulse-red { from { background-color: #E43138; box-shadow: 0 0 15px rgba(229, 49, 56, 0.6); } to { background-color: #ff5258; box-shadow: 0 0 30px rgba(229, 49, 56, 0.9); } }
+        .no-session { text-align: center; padding: 80px; font-size: 2.5rem; font-weight: bold; color: #8a8a93; background-color: #141418; border-radius: 12px; border: 2px dashed #444; }
 
-        .no-session {
-            text-align: center; padding: 80px; font-size: 2.5rem; font-weight: bold;
-            color: #8a8a93; background-color: #141418; border-radius: 12px; border: 2px dashed #444;
-        }
-
-        /* BOTTOM TICKER / MARQUEE */
-        .ticker-container {
-            position: fixed; bottom: 0; left: 0; width: 100%; height: 70px;
-            background-color: #141418; border-top: 3px solid #ffcc00; display: flex; align-items: center;
-            overflow: hidden; z-index: 1000; box-shadow: 0 -5px 20px rgba(0,0,0,0.8);
-        }
-        .ticker-label {
-            background-color: #ffcc00; color: #000; font-weight: 900; text-transform: uppercase;
-            padding: 0 30px; height: 100%; display: flex; align-items: center; white-space: nowrap;
-            z-index: 2; font-size: 1.6rem; letter-spacing: 2px; box-shadow: 5px 0 15px rgba(0,0,0,0.7);
-        }
+        /* TICKER */
+        .ticker-container { position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; background-color: #141418; border-top: 3px solid #ffcc00; display: flex; align-items: center; overflow: hidden; z-index: 1000; box-shadow: 0 -5px 20px rgba(0,0,0,0.8); }
+        .ticker-label { background-color: #ffcc00; color: #000; font-weight: 900; text-transform: uppercase; padding: 0 30px; height: 100%; display: flex; align-items: center; white-space: nowrap; z-index: 2; font-size: 1.6rem; letter-spacing: 2px; box-shadow: 5px 0 15px rgba(0,0,0,0.7); }
         .ticker-container.announcement-active { border-top-color: #2196f3; }
         .ticker-container.announcement-active .ticker-label { background-color: #2196f3; color: #fff; }
-
         .ticker-content-wrapper { flex: 1; overflow: hidden; display: flex; align-items: center; height: 100%; }
-        .ticker-text {
-            white-space: nowrap; padding-left: 100%; display: inline-block; font-size: 1.8rem;
-            font-weight: 600; color: #ffffff; text-transform: uppercase; animation: ticker-move 30s linear infinite;
-        }
+        .ticker-text { white-space: nowrap; padding-left: 100%; display: inline-block; font-size: 1.8rem; font-weight: 600; color: #ffffff; text-transform: uppercase; animation: ticker-move 30s linear infinite; }
         .ticker-text span.highlight-blue { color: #2196f3; font-weight: 800; }
         .ticker-text span.highlight-yellow { color: #ffcc00; font-weight: 800; }
         @keyframes ticker-move { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
-
     </style>
 </head>
 <body>
@@ -146,7 +81,6 @@
             </div>
         </header>
 
-        <!-- TOP BAR: NEXT SESSION + GATE STATUS -->
         <div class="upcoming-top-bar" id="upcoming-modules-box" style="display: none;">
             <div class="upcoming-left">
                 <div class="upcoming-left-label">NEXT SESSION</div>
@@ -168,7 +102,6 @@
             </div>
         </div>
 
-        <!-- MAIN ON TRACK MODULE -->
         <main class="main-display">
             <div id="current-session-box" class="session-card">
                 <span class="session-status">ON TRACK NOW</span>
@@ -182,14 +115,12 @@
                     <span class="countdown-timer" id="curr-countdown">00:00</span>
                 </div>
             </div>
-
             <div id="no-session-box" class="no-session" style="display: none;">
                 🏁 ALL SESSIONS COMPLETED FOR TODAY
             </div>
         </main>
     </div>
 
-    <!-- BOTTOM TICKER -->
     <div class="ticker-container" id="bottom-ticker-box">
         <div class="ticker-label" id="ticker-label">NOTE</div>
         <div class="ticker-content-wrapper">
@@ -200,7 +131,7 @@
     <script>
         function toggleFullScreen() {
             if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(err => { console.log(`Error: ${err.message}`); });
+                document.documentElement.requestFullscreen();
                 document.getElementById('fs-btn').textContent = "✖ Exit Fullscreen";
             } else {
                 if (document.exitFullscreen) { document.exitFullscreen(); document.getElementById('fs-btn').textContent = "⛶ Fullscreen"; }
@@ -208,11 +139,8 @@
         }
 
         const mockSchedule = [
-            { startTime: "08:00", endTime: "08:30", category: "ALL Drivers", activity: "Track Walk" },
-            { startTime: "08:30", endTime: "08:50", category: "ALL Drivers", activity: "Track Inspection" },
-            { startTime: "09:05", endTime: "09:20", category: "Micro MAX", activity: "Paid Practice 1" }
+            { startTime: "08:00", endTime: "08:30", category: "ALL Drivers", activity: "Track Walk" }
         ];
-
         let activeSchedule = [...mockSchedule];
         const GATE_NOTE_DEFAULT = "Start servicing park gate will be OPEN 15 MINS before the start of the categories and will be CLOSE 5 MINS before the start of the categories.";
 
@@ -221,15 +149,12 @@
             if (savedUrl) fetchLiveSheetData(savedUrl);
             
             window.addEventListener('storage', (e) => {
-                if (e.key === 'google_sheet_csv_url' || e.key === 'sim_mode' || e.key === 'sim_time' || e.key === 'custom_announcement') {
-                    if (e.key === 'google_sheet_csv_url') {
-                        if (e.newValue) fetchLiveSheetData(e.newValue);
-                        else activeSchedule = [...mockSchedule];
-                    }
-                    updateDashboard(); 
+                if (e.key === 'google_sheet_csv_url') {
+                    if (e.newValue) fetchLiveSheetData(e.newValue);
+                    else activeSchedule = [...mockSchedule];
                 }
+                updateDashboard(); 
             });
-
             setInterval(updateDashboard, 1000);
             updateDashboard();
         });
@@ -250,25 +175,21 @@
                     }
                     cols.push(value.trim());
 
-                    // --- SMART CSV PARSER (Finds time columns automatically) ---
                     let timeStartIndex = -1;
                     for(let j=0; j < cols.length; j++) {
                         let testVal = cols[j];
                         if (testVal && testVal.split(':').length === 3) testVal = testVal.split(':').slice(0, 2).join(':');
-                        if (/^\d{1,2}:\d{2}$/.test(testVal)) {
-                            timeStartIndex = j; break;
-                        }
+                        if (/^\d{1,2}:\d{2}$/.test(testVal)) { timeStartIndex = j; break; }
                     }
 
                     if (timeStartIndex !== -1 && cols.length >= timeStartIndex + 3) {
                         let startTime = cols[timeStartIndex];
                         let endTime = cols[timeStartIndex + 1];
-                        let category = cols[timeStartIndex + 2] || "ALL CLASSES"; // Fallback for blank categories
+                        let category = cols[timeStartIndex + 2] || "ALL CLASSES"; 
                         let activity = cols[timeStartIndex + 3] || "SESSION";
                         
                         if (startTime && startTime.split(':').length === 3) startTime = startTime.split(':').slice(0, 2).join(':');
                         if (endTime && endTime.split(':').length === 3) endTime = endTime.split(':').slice(0, 2).join(':');
-
                         if (/^\d{1,2}:\d{2}$/.test(startTime) && /^\d{1,2}:\d{2}$/.test(endTime)) {
                             parsedSessions.push({ startTime, endTime, category, activity });
                         }
@@ -285,17 +206,12 @@
             return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
         }
 
-        // --- UPGRADED TIMER FORMATTER ---
         function formatSecondsToMMSS(totalSeconds) {
             if (totalSeconds < 0) totalSeconds = 0;
             const hours = Math.floor(totalSeconds / 3600);
             const minutes = Math.floor((totalSeconds % 3600) / 60);
             const seconds = totalSeconds % 60;
-            
-            // If waiting time is over an hour, show HH:MM:SS instead of 300+ minutes
-            if (hours > 0) {
-                return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-            }
+            if (hours > 0) return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
             return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
         }
 
@@ -333,7 +249,6 @@
             for (let session of sortedSchedule) {
                 const startMins = timeToMinutes(session.startTime);
                 const endMins = timeToMinutes(session.endTime);
-
                 if (currentMinutesOfDay >= startMins && currentMinutesOfDay < endMins) {
                     currentSession = session;
                 } else if (startMins > currentMinutesOfDay && !upcomingSession) {
@@ -341,7 +256,6 @@
                 }
             }
 
-            // Fallback UI
             if (!currentSession && !upcomingSession) {
                 document.getElementById('current-session-box').style.display = 'none';
                 document.getElementById('upcoming-modules-box').style.display = 'none';
@@ -350,21 +264,18 @@
             }
             document.getElementById('no-session-box').style.display = 'none';
 
-            // --- CURRENT SESSION LOGIC ---
+            // --- CURRENT ---
             if (currentSession) {
                 document.getElementById('current-session-box').style.display = 'block';
                 document.getElementById('curr-category').textContent = currentSession.category;
                 document.getElementById('curr-activity').textContent = currentSession.activity;
-
                 const endSecondsTotal = timeToMinutes(currentSession.endTime) * 60;
                 document.getElementById('curr-countdown').textContent = formatSecondsToMMSS(endSecondsTotal - currentSecondsValue);
 
                 if (currentSession.activity.trim().toUpperCase() === "QUALIFYING PRACTICE") {
                     const elapsedSeconds = currentSecondsValue - (timeToMinutes(currentSession.startTime) * 60);
                     document.getElementById('qualifying-warning').style.display = (elapsedSeconds >= 0 && elapsedSeconds <= 120) ? 'block' : 'none';
-                } else {
-                    document.getElementById('qualifying-warning').style.display = 'none';
-                }
+                } else { document.getElementById('qualifying-warning').style.display = 'none'; }
             } else {
                 document.getElementById('current-session-box').style.display = 'block';
                 document.getElementById('curr-category').textContent = "TRACK CLEAR";
@@ -373,18 +284,14 @@
                 document.getElementById('qualifying-warning').style.display = 'none';
             }
 
-            // --- UPCOMING TOP BAR LOGIC (Next Session + Gate Status) ---
+            // --- UPCOMING ---
             const upcomingBox = document.getElementById('upcoming-modules-box');
             if (upcomingSession) {
                 upcomingBox.style.display = 'flex';
-                
-                // Set Left Side
                 document.getElementById('top-next-name').textContent = upcomingSession.category;
                 document.getElementById('top-next-act').textContent = `${upcomingSession.activity} @ ${upcomingSession.startTime}`;
 
                 const sessionStartMins = timeToMinutes(upcomingSession.startTime);
-                
-                // Set Right Side (Gate Logic)
                 const gateOpenMins = sessionStartMins - 15;
                 const gateCloseMins = sessionStartMins - 5;
                 const gateCloseSecs = gateCloseMins * 60;
@@ -401,49 +308,49 @@
                 const gateTimerTxt = document.getElementById('gate-countdown-timer');
 
                 let panelClass = "";
-
                 if (secsToGateOpen > 0) {
-                    gateStatusTxt.textContent = "OPENS IN";
-                    gateTimerTxt.textContent = formatSecondsToMMSS(secsToGateOpen);
-                    panelClass = "";
+                    gateStatusTxt.textContent = "OPENS IN"; gateTimerTxt.textContent = formatSecondsToMMSS(secsToGateOpen); panelClass = "";
                 } else if (secsToGateClose > 0) {
-                    gateStatusTxt.textContent = "CLOSES IN";
-                    gateTimerTxt.textContent = formatSecondsToMMSS(secsToGateClose);
-                    
-                    if (secsToGateClose <= 10) {
-                        panelClass = "gate-flash-fast";
-                    } else if (secsToGateClose <= 300) {
+                    gateStatusTxt.textContent = "CLOSES IN"; gateTimerTxt.textContent = formatSecondsToMMSS(secsToGateClose);
+                    if (secsToGateClose <= 10) panelClass = "gate-flash-fast";
+                    else if (secsToGateClose <= 300) {
                         let m30 = secsToGateClose % 30;
-                        if (m30 === 0 || m30 >= 28) panelClass = "gate-flash-red";
-                        else panelClass = "gate-open-solid";
-                    } else {
-                        panelClass = "gate-open-solid";
-                    }
+                        if (m30 === 0 || m30 >= 28) panelClass = "gate-flash-red"; else panelClass = "gate-open-solid";
+                    } else panelClass = "gate-open-solid";
                 } else {
-                    gateStatusTxt.textContent = "CLOSED";
-                    gateTimerTxt.textContent = "00:00";
-                    panelClass = "gate-closed";
+                    gateStatusTxt.textContent = "CLOSED"; gateTimerTxt.textContent = "00:00"; panelClass = "gate-closed";
                 }
-                
                 gatePanel.className = `upcoming-right ${panelClass}`;
             } else {
                 upcomingBox.style.display = 'none';
             }
 
-            // --- BOTTOM TICKER LOGIC ---
-            const customNote = localStorage.getItem('custom_announcement') || "";
-            const cycleSec = currentSecondsValue % 300; 
+            // --- BOTTOM TICKER LOGIC (JSON parsed) ---
+            let customNoteObj = null;
+            try { customNoteObj = JSON.parse(localStorage.getItem('custom_announcement')); } catch(e) {}
             
+            const cycleSec = currentSecondsValue % 300; 
             const tickerContainer = document.getElementById('bottom-ticker-box');
             const tickerLabel = document.getElementById('ticker-label');
             const tickerElem = document.getElementById('ticker-dynamic-text');
 
             let tickerHtml = "";
+            let showAnnouncement = false;
 
-            if (customNote && cycleSec >= 240) {
+            if (customNoteObj && customNoteObj.text) {
+                const currentUnix = Math.floor(Date.now() / 1000);
+                const ageSec = currentUnix - customNoteObj.timestamp;
+                // บังคับโชว์ 60 วิแรกหลังกดส่งทันที หรือ โชว์ในช่วงนาทีที่ 5 ของลูป
+                if (ageSec < 60 || cycleSec >= 240) {
+                    showAnnouncement = true;
+                }
+            }
+
+            if (showAnnouncement) {
                 tickerContainer.classList.add('announcement-active');
                 tickerLabel.textContent = "ANNOUNCEMENT";
-                tickerHtml = `📢 <span class="highlight-yellow">${customNote}</span> &nbsp;&nbsp;&nbsp;&nbsp; 📢 <span class="highlight-yellow">${customNote}</span>`;
+                let textStr = `[${customNoteObj.time}] ${customNoteObj.text}`;
+                tickerHtml = `📢 <span class="highlight-yellow">${textStr}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 📢 <span class="highlight-yellow">${textStr}</span>`;
             } else {
                 tickerContainer.classList.remove('announcement-active');
                 tickerLabel.textContent = "NOTE";
@@ -455,11 +362,6 @@
                 tickerElem.innerHTML = tickerHtml;
                 tickerElem.dataset.lastContent = tickerHtml;
             }
-        }
-
-        function timeToMinutes(timeStr) {
-            const [hours, minutes] = timeStr.split(':').map(Number);
-            return hours * 60 + minutes;
         }
     </script>
 </body>
