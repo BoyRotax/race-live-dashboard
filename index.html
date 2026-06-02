@@ -1,4 +1,4 @@
-index_v3_content = """<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -16,10 +16,11 @@ index_v3_content = """<!DOCTYPE html>
             background-color: #0a0a0c;
             color: #ffffff;
             overflow: hidden; /* Prevent scrolling for TV display */
-            padding: 20px 20px 80px 20px; /* Added bottom padding to make room for fixed ticker */
+            padding: 20px 20px 80px 20px;
             height: 100vh;
             display: flex;
             flex-direction: column;
+            position: relative;
         }
 
         .container {
@@ -29,6 +30,29 @@ index_v3_content = """<!DOCTYPE html>
             flex: 1;
             display: flex;
             flex-direction: column;
+        }
+
+        /* Full Screen Button (Faded, Top Right) */
+        .fullscreen-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            opacity: 0.2;
+            transition: opacity 0.3s, background 0.3s;
+            z-index: 2000;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .fullscreen-btn:hover {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.2);
         }
 
         /* Header Styles */
@@ -54,6 +78,7 @@ index_v3_content = """<!DOCTYPE html>
 
         .local-time-container {
             text-align: right;
+            padding-right: 80px; /* Space for fullscreen button */
         }
 
         .time-label {
@@ -147,10 +172,10 @@ index_v3_content = """<!DOCTYPE html>
             line-height: 1;
         }
 
-        /* 2-Minute Warning Alert Style */
+        /* 2-Minute Warning Alert Style (Updated to new RED: #E43138) */
         .qualifying-warning-box {
             margin-top: 25px;
-            background-color: #d50000;
+            background-color: #E43138;
             color: #ffffff;
             padding: 25px;
             border-radius: 8px;
@@ -159,17 +184,17 @@ index_v3_content = """<!DOCTYPE html>
             font-size: 1.8rem;
             text-transform: uppercase;
             letter-spacing: 1px;
-            box-shadow: 0 0 20px rgba(213, 0, 0, 0.6);
+            box-shadow: 0 0 20px rgba(229, 49, 56, 0.6);
             animation: pulse-red 1s infinite alternate;
             display: none;
         }
 
         @keyframes pulse-red {
-            from { background-color: #d50000; box-shadow: 0 0 15px rgba(213, 0, 0, 0.6); }
-            to { background-color: #ff1744; box-shadow: 0 0 30px rgba(255, 23, 68, 0.9); }
+            from { background-color: #E43138; box-shadow: 0 0 15px rgba(229, 49, 56, 0.6); }
+            to { background-color: #ff5258; box-shadow: 0 0 30px rgba(229, 49, 56, 0.9); }
         }
 
-        /* --- TICKER / MARQUEE (Fixed at Bottom) --- */
+        /* --- TICKER / MARQUEE --- */
         .ticker-container {
             position: fixed;
             bottom: 0;
@@ -183,18 +208,18 @@ index_v3_content = """<!DOCTYPE html>
             overflow: hidden;
             z-index: 1000;
             box-shadow: 0 -5px 20px rgba(0,0,0,0.8);
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, border-top-color 0.3s;
         }
 
-        /* 1-Minute Urgent Blink Class */
+        /* 1-Minute Urgent Blink Class (Updated to new RED: #E43138) */
         .ticker-container.urgent-blink {
             animation: urgent-ticker-pulse 1s infinite alternate;
-            border-top: 3px solid #ff1744;
+            border-top: 3px solid #E43138;
         }
 
         @keyframes urgent-ticker-pulse {
-            from { background-color: #3b0000; }
-            to { background-color: #d50000; }
+            from { background-color: #4a1012; } /* Dark red */
+            to { background-color: #E43138; } /* Primary requested red */
         }
 
         .ticker-label {
@@ -214,7 +239,7 @@ index_v3_content = """<!DOCTYPE html>
         }
 
         .urgent-blink .ticker-label {
-            background-color: #ff1744; /* Change label to red when blinking */
+            background-color: #E43138; /* Match urgent red */
         }
 
         .ticker-content-wrapper {
@@ -246,20 +271,6 @@ index_v3_content = """<!DOCTYPE html>
             100% { transform: translate3d(-100%, 0, 0); }
         }
 
-        /* Tester Controls */
-        .sim-panel {
-            background-color: #13131a;
-            border: 1px dashed #444;
-            padding: 8px 15px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            font-size: 0.85rem;
-        }
-        .sim-panel input[type="time"] { background: #000; border: 1px solid #666; color: #fff; padding: 2px 5px; }
-
         .no-session {
             text-align: center;
             padding: 80px;
@@ -274,17 +285,9 @@ index_v3_content = """<!DOCTYPE html>
 </head>
 <body>
 
-    <div class="container">
-        
-        <!-- Tester / Simulation Row -->
-        <div class="sim-panel">
-            <span style="color: #ffcc00; font-weight: bold;">⚙️ TEST MODE:</span>
-            <label><input type="radio" name="time-mode" value="real" checked> Real Time</label>
-            <label><input type="radio" name="time-mode" value="sim"> Simulate:</label>
-            <input type="time" id="sim-time-input" value="13:24">
-            <span style="color: #8a8a93;">(Tip: Set to 13:24 to test the 1-Min Ticker Blink. Set to 16:06 to test Qualifying Warning)</span>
-        </div>
+    <button class="fullscreen-btn" onclick="toggleFullScreen()" id="fs-btn">⛶ Fullscreen</button>
 
+    <div class="container">
         <header>
             <div class="logo-title">
                 <h1>RMC Thailand <span>Live Dashboard</span></h1>
@@ -295,16 +298,13 @@ index_v3_content = """<!DOCTYPE html>
             </div>
         </header>
 
-        <!-- MAIN ACTIVE DISPLAY -->
         <main class="main-display">
-            
             <div id="current-session-box" class="session-card">
                 <span class="session-status">ON TRACK NOW</span>
                 
                 <div class="category-name" id="curr-category">LOADING...</div>
                 <div class="activity-name" id="curr-activity">-</div>
                 
-                <!-- 2-Minute Rule Alert Box for Qualifying Practice -->
                 <div class="qualifying-warning-box" id="qualifying-warning">
                     ⚠️ WARNING: Drivers must be on track 2 minutes after Qualifying Practice started!
                 </div>
@@ -315,15 +315,12 @@ index_v3_content = """<!DOCTYPE html>
                 </div>
             </div>
 
-            <!-- Fallback if race day ends -->
             <div id="no-session-box" class="no-session" style="display: none;">
                 🏁 ALL SESSIONS COMPLETED FOR TODAY
             </div>
-
         </main>
     </div>
 
-    <!-- FIXED TICKER AT THE BOTTOM -->
     <div class="ticker-container" id="upcoming-ticker-box">
         <div class="ticker-label">NEXT SESSION</div>
         <div class="ticker-content-wrapper">
@@ -334,7 +331,20 @@ index_v3_content = """<!DOCTYPE html>
     </div>
 
     <script>
-        // Updated Mock Data to match RMC Thailand 2026 Round 3 (Saturday) image
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log(`Error attempting to enable fullscreen: ${err.message}`);
+                });
+                document.getElementById('fs-btn').textContent = "✖ Exit Fullscreen";
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                    document.getElementById('fs-btn').textContent = "⛶ Fullscreen";
+                }
+            }
+        }
+
         const mockSchedule = [
             { startTime: "08:00", endTime: "08:20", category: "MICRO MAX / MINI MAX", activity: "REGISTRATION" },
             { startTime: "08:30", endTime: "08:50", category: "JUNIOR MAX", activity: "REGISTRATION" },
@@ -356,6 +366,7 @@ index_v3_content = """<!DOCTYPE html>
             const savedUrl = localStorage.getItem('google_sheet_csv_url');
             if (savedUrl) fetchLiveSheetData(savedUrl);
             
+            // Listen for changes from admin panel (Data source OR Test mode changes)
             window.addEventListener('storage', (e) => {
                 if (e.key === 'google_sheet_csv_url') {
                     if (e.newValue) fetchLiveSheetData(e.newValue);
@@ -371,7 +382,7 @@ index_v3_content = """<!DOCTYPE html>
             try {
                 const response = await fetch(url);
                 const dataText = await response.text();
-                const lines = dataText.split(/\\r?\\n/);
+                const lines = dataText.split(/\r?\n/);
                 const parsedSessions = [];
                 
                 for (let i = 0; i < lines.length; i++) {
@@ -381,7 +392,7 @@ index_v3_content = """<!DOCTYPE html>
                         const endTime = cols[2];
                         const category = cols[3];
                         const activity = cols[4];
-                        if (/^\\d{1,2}:\\d{2}$/.test(startTime) && /^\\d{1,2}:\\d{2}$/.test(endTime)) {
+                        if (/^\d{1,2}:\d{2}$/.test(startTime) && /^\d{1,2}:\d{2}$/.test(endTime)) {
                             parsedSessions.push({ startTime, endTime, category, activity });
                         }
                     }
@@ -393,11 +404,12 @@ index_v3_content = """<!DOCTYPE html>
         }
 
         function updateDashboard() {
-            const timeMode = document.querySelector('input[name="time-mode"]:checked').value;
+            // Read Test Mode state directly from localStorage
+            const timeMode = localStorage.getItem('sim_mode') || 'real';
             let currentDisplayDate = new Date();
             
             if (timeMode === 'sim') {
-                const simTimeStr = document.getElementById('sim-time-input').value;
+                const simTimeStr = localStorage.getItem('sim_time') || "12:00";
                 const [sHours, sMinutes] = simTimeStr.split(':').map(Number);
                 currentDisplayDate.setHours(sHours, sMinutes, currentDisplayDate.getSeconds()); 
             }
@@ -405,7 +417,19 @@ index_v3_content = """<!DOCTYPE html>
             const hrs = String(currentDisplayDate.getHours()).padStart(2, '0');
             const mins = String(currentDisplayDate.getMinutes()).padStart(2, '0');
             const secs = String(currentDisplayDate.getSeconds()).padStart(2, '0');
-            document.getElementById('local-clock').textContent = `${hrs}:${mins}:${secs}`;
+            
+            // Highlight clock in red if Test Mode is active
+            const clockEl = document.getElementById('local-clock');
+            clockEl.textContent = `${hrs}:${mins}:${secs}`;
+            if (timeMode === 'sim') {
+                clockEl.style.color = "#E43138";
+                clockEl.style.textShadow = "0 0 10px rgba(229, 49, 56, 0.4)";
+                document.querySelector('.time-label').textContent = "SIMULATED TIME";
+            } else {
+                clockEl.style.color = "#ffcc00";
+                clockEl.style.textShadow = "0 0 10px rgba(255, 204, 0, 0.3)";
+                document.querySelector('.time-label').textContent = "Local Time";
+            }
 
             const currentMinutesOfDay = currentDisplayDate.getHours() * 60 + currentDisplayDate.getMinutes();
             const currentSecondsValue = currentMinutesOfDay * 60 + currentDisplayDate.getSeconds();
@@ -445,7 +469,7 @@ index_v3_content = """<!DOCTYPE html>
                 const remainingSeconds = endSecondsTotal - currentSecondsValue;
                 document.getElementById('curr-countdown').textContent = formatSecondsToMMSS(remainingSeconds);
 
-                if (currentSession.activity.trim() === "QUALIFYING PRACTICE" || currentSession.activity.trim() === "Qualifying Practice") {
+                if (currentSession.activity.trim().toUpperCase() === "QUALIFYING PRACTICE") {
                     const startSecondsTotal = timeToMinutes(currentSession.startTime) * 60;
                     const elapsedSeconds = currentSecondsValue - startSecondsTotal;
 
@@ -465,7 +489,7 @@ index_v3_content = """<!DOCTYPE html>
                 document.getElementById('qualifying-warning').style.display = 'none';
             }
 
-            // --- UPCOMING TICKER LOGIC (Fixed at bottom & 1-min blink) ---
+            // --- UPCOMING TICKER LOGIC ---
             const tickerBox = document.getElementById('upcoming-ticker-box');
             if (upcomingSession) {
                 tickerBox.style.display = 'flex';
@@ -474,14 +498,12 @@ index_v3_content = """<!DOCTYPE html>
                 const secondsUntilStart = nextStartSecondsTotal - currentSecondsValue;
                 const countdownStr = formatSecondsToMMSS(secondsUntilStart);
 
-                // Check for 1-minute (60 seconds) warning to trigger blink effect
                 if (secondsUntilStart <= 60 && secondsUntilStart > 0) {
                     tickerBox.classList.add('urgent-blink');
                 } else {
                     tickerBox.classList.remove('urgent-blink');
                 }
 
-                // Construct text combining upcoming session details + The Rule Note
                 const tickerHtml = `<span class="highlight-blue">${upcomingSession.category}</span> - ${upcomingSession.activity} | STARTS AT: <span class="highlight-yellow">${upcomingSession.startTime}</span> | COUNTDOWN: <span class="highlight-yellow">${countdownStr}</span> &nbsp;&nbsp;&nbsp;&nbsp; 🔴 ${GATE_NOTE} 🔴 &nbsp;&nbsp;&nbsp;&nbsp;`;
                 
                 const tickerElem = document.getElementById('ticker-dynamic-text');
@@ -509,9 +531,3 @@ index_v3_content = """<!DOCTYPE html>
     </script>
 </body>
 </html>
-"""
-
-with open("index.html", "w", encoding="utf-8") as f:
-    f.write(index_v3_content)
-
-print("Index V3 with fixed ticker, 1-min blink, and gate note generated successfully.")
