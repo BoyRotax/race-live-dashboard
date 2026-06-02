@@ -83,7 +83,7 @@
         </div>
         <div class="input-group">
             <label>Set Simulated Time (HH:MM)</label>
-            <input type="time" id="sim-time-input" value="13:50" onchange="updateSimMode()">
+            <input type="time" id="sim-time-input" value="13:54" onchange="updateSimMode()">
         </div>
         <div class="status-msg" id="sim-status" style="color:#E43138;"></div>
     </div>
@@ -99,9 +99,7 @@
             loadSettings();
         }
         
-        function handleCredentialResponse(response) {
-            // ... (Auth logic remains the same)
-        }
+        function handleCredentialResponse(response) {}
 
         function loadSettings() {
             const savedUrl = localStorage.getItem('google_sheet_csv_url');
@@ -111,7 +109,7 @@
             if (savedNote) document.getElementById('custom-note').value = savedNote;
 
             const mode = localStorage.getItem('sim_mode') || 'real';
-            const time = localStorage.getItem('sim_time') || '13:50';
+            const time = localStorage.getItem('sim_time') || '13:54';
             document.querySelector(`input[name="time-mode"][value="${mode}"]`).checked = true;
             document.getElementById('sim-time-input').value = time;
         }
@@ -132,7 +130,7 @@
                 return;
             }
             localStorage.setItem('google_sheet_csv_url', url);
-            statusBox.textContent = "✔ Live Source Broadcasted Successfully!";
+            statusBox.textContent = "✔ Live Source Broadcasted Successfully! (Please Refresh Dashboard to test)";
             statusBox.style.color = "#00e676";
         }
 
@@ -140,7 +138,7 @@
             const note = document.getElementById('custom-note').value.trim();
             localStorage.setItem('custom_announcement', note);
             const statusBox = document.getElementById('note-status');
-            statusBox.textContent = note ? "✔ Announcement broadcasted!" : "✔ Announcement cleared (Running default rules only).";
+            statusBox.textContent = note ? "✔ Announcement broadcasted! Check Dashboard." : "✔ Announcement cleared (Running default rules only).";
             statusBox.style.color = "#00e676";
             setTimeout(() => { statusBox.textContent = ""; }, 3000);
         }
