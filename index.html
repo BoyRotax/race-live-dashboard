@@ -1,4 +1,4 @@
-index_v7_content = """<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,20 +8,12 @@ index_v7_content = """<!DOCTYPE html>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #0a0a0c;
-            color: #ffffff;
-            overflow: hidden;
-            padding: 20px 20px 80px 20px; /* Padding for bottom ticker */
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            position: relative;
+            background-color: #0a0a0c; color: #ffffff; overflow: hidden;
+            padding: 20px 20px 80px 20px; height: 100vh; display: flex;
+            flex-direction: column; position: relative;
         }
 
-        .container {
-            max-width: 1400px; margin: 0 auto; width: 100%; flex: 1;
-            display: flex; flex-direction: column;
-        }
+        .container { max-width: 1400px; margin: 0 auto; width: 100%; flex: 1; display: flex; flex-direction: column; }
 
         /* Full Screen Button */
         .fullscreen-btn {
@@ -46,16 +38,14 @@ index_v7_content = """<!DOCTYPE html>
             color: #ffcc00; text-shadow: 0 0 10px rgba(255, 204, 0, 0.3); line-height: 1;
         }
 
-        /* --- NEW: UPCOMING TOP BAR (Next Session + Gate Status combined) --- */
+        /* TOP BAR: NEXT SESSION + GATE STATUS */
         .upcoming-top-bar {
             display: flex; background-color: #141418; border: 2px solid #333; border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.5); overflow: hidden; margin-bottom: 25px;
-            min-height: 110px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5); overflow: hidden; margin-bottom: 25px; min-height: 110px;
         }
         .upcoming-left {
             padding: 15px 25px; background: linear-gradient(135deg, #1e88e5, #1565c0); color: #fff;
-            display: flex; flex-direction: column; justify-content: center; min-width: 35%;
-            border-right: 3px solid #0a0a0c;
+            display: flex; flex-direction: column; justify-content: center; min-width: 35%; border-right: 3px solid #0a0a0c;
         }
         .upcoming-left-label { font-size: 1rem; font-weight: bold; color: rgba(255,255,255,0.8); letter-spacing: 2px; margin-bottom: 5px; }
         .top-next-name { font-size: 2.2rem; font-weight: 900; text-transform: uppercase; line-height: 1; margin-bottom: 5px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
@@ -70,33 +60,20 @@ index_v7_content = """<!DOCTYPE html>
         .gate-times strong { color: #fff; font-size: 1.4rem;}
         .gate-timer-box { display: flex; align-items: center; gap: 20px; text-align: right;}
         .gate-status-text { font-size: 1.3rem; font-weight: 800; color: #fff; text-transform: uppercase; display: block;}
-        .gate-countdown-timer {
-            font-family: 'Courier New', Courier, monospace; font-size: 4rem; font-weight: 900; color: #a0a0ab; line-height: 1;
-        }
+        .gate-countdown-timer { font-family: 'Courier New', Courier, monospace; font-size: 4rem; font-weight: 900; color: #a0a0ab; line-height: 1; }
 
         /* Gate Panel Dynamic States */
         .gate-open-solid { border-bottom: 5px solid #00e676; background-color: #122217; }
         .gate-open-solid .gate-title { color: #00e676; }
         .gate-open-solid .gate-countdown-timer { color: #00e676; text-shadow: 0 0 15px rgba(0, 230, 118, 0.4); }
-        
         .gate-closed { border-bottom: 5px solid #E43138; opacity: 0.8; }
         .gate-closed .gate-countdown-timer { color: #E43138; }
-        
-        /* The 3-second flash every 30s */
-        .gate-flash-red {
-            background-color: #E43138 !important; border-color: #ff5258 !important;
-            box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5) !important;
-        }
+        .gate-flash-red { background-color: #E43138 !important; border-color: #ff5258 !important; box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5) !important; }
         .gate-flash-red * { color: #ffffff !important; text-shadow: none !important;}
-        
-        /* The continuous fast flash in last 10s */
         .gate-flash-fast { animation: gate-fast-flash 0.5s infinite alternate !important; }
-        @keyframes gate-fast-flash {
-            from { background-color: #E43138; box-shadow: inset 0 0 30px rgba(0,0,0,0.5); }
-            to { background-color: #1a1a24; box-shadow: none; }
-        }
+        @keyframes gate-fast-flash { from { background-color: #E43138; box-shadow: inset 0 0 30px rgba(0,0,0,0.5); } to { background-color: #1a1a24; box-shadow: none; } }
 
-        /* --- MAIN ON TRACK MODULE --- */
+        /* MAIN ON TRACK MODULE */
         .main-display { flex: 1; display: flex; flex-direction: column; justify-content: center; }
         .session-card {
             background: linear-gradient(145deg, #111e16, #141418); border-left: 12px solid #00e676;
@@ -122,17 +99,14 @@ index_v7_content = """<!DOCTYPE html>
             font-weight: bold; text-align: center; font-size: 1.8rem; text-transform: uppercase; letter-spacing: 1px;
             box-shadow: 0 0 20px rgba(229, 49, 56, 0.6); animation: pulse-red 1s infinite alternate; display: none;
         }
-        @keyframes pulse-red {
-            from { background-color: #E43138; box-shadow: 0 0 15px rgba(229, 49, 56, 0.6); }
-            to { background-color: #ff5258; box-shadow: 0 0 30px rgba(229, 49, 56, 0.9); }
-        }
+        @keyframes pulse-red { from { background-color: #E43138; box-shadow: 0 0 15px rgba(229, 49, 56, 0.6); } to { background-color: #ff5258; box-shadow: 0 0 30px rgba(229, 49, 56, 0.9); } }
 
         .no-session {
             text-align: center; padding: 80px; font-size: 2.5rem; font-weight: bold;
             color: #8a8a93; background-color: #141418; border-radius: 12px; border: 2px dashed #444;
         }
 
-        /* --- BOTTOM TICKER / MARQUEE --- */
+        /* BOTTOM TICKER / MARQUEE */
         .ticker-container {
             position: fixed; bottom: 0; left: 0; width: 100%; height: 70px;
             background-color: #141418; border-top: 3px solid #ffcc00; display: flex; align-items: center;
@@ -143,7 +117,6 @@ index_v7_content = """<!DOCTYPE html>
             padding: 0 30px; height: 100%; display: flex; align-items: center; white-space: nowrap;
             z-index: 2; font-size: 1.6rem; letter-spacing: 2px; box-shadow: 5px 0 15px rgba(0,0,0,0.7);
         }
-        /* When announcement is active, make label blue */
         .ticker-container.announcement-active { border-top-color: #2196f3; }
         .ticker-container.announcement-active .ticker-label { background-color: #2196f3; color: #fff; }
 
@@ -154,7 +127,6 @@ index_v7_content = """<!DOCTYPE html>
         }
         .ticker-text span.highlight-blue { color: #2196f3; font-weight: 800; }
         .ticker-text span.highlight-yellow { color: #ffcc00; font-weight: 800; }
-        .ticker-text span.highlight-red { color: #E43138; font-weight: 800; }
         @keyframes ticker-move { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
 
     </style>
@@ -190,9 +162,7 @@ index_v7_content = """<!DOCTYPE html>
                     </div>
                 </div>
                 <div class="gate-timer-box">
-                    <div>
-                        <span class="gate-status-text" id="gate-status-text">STATUS</span>
-                    </div>
+                    <div><span class="gate-status-text" id="gate-status-text">STATUS</span></div>
                     <span class="gate-countdown-timer" id="gate-countdown-timer">00:00</span>
                 </div>
             </div>
@@ -223,9 +193,7 @@ index_v7_content = """<!DOCTYPE html>
     <div class="ticker-container" id="bottom-ticker-box">
         <div class="ticker-label" id="ticker-label">NOTE</div>
         <div class="ticker-content-wrapper">
-            <div class="ticker-text" id="ticker-dynamic-text">
-                Loading notes...
-            </div>
+            <div class="ticker-text" id="ticker-dynamic-text">Loading notes...</div>
         </div>
     </div>
 
@@ -240,8 +208,9 @@ index_v7_content = """<!DOCTYPE html>
         }
 
         const mockSchedule = [
-            { startTime: "08:00", endTime: "08:20", category: "MICRO MAX / MINI MAX", activity: "REGISTRATION" },
-            { startTime: "14:00", endTime: "14:20", category: "JUNIOR MAX", activity: "OFFICIAL PRACTICE #1" }
+            { startTime: "08:00", endTime: "08:30", category: "ALL Drivers", activity: "Track Walk" },
+            { startTime: "08:30", endTime: "08:50", category: "ALL Drivers", activity: "Track Inspection" },
+            { startTime: "09:05", endTime: "09:20", category: "Micro MAX", activity: "Paid Practice 1" }
         ];
 
         let activeSchedule = [...mockSchedule];
@@ -251,13 +220,14 @@ index_v7_content = """<!DOCTYPE html>
             const savedUrl = localStorage.getItem('google_sheet_csv_url');
             if (savedUrl) fetchLiveSheetData(savedUrl);
             
-            // Sync instantly when admin changes settings in another tab
             window.addEventListener('storage', (e) => {
-                if (e.key === 'google_sheet_csv_url') {
-                    if (e.newValue) fetchLiveSheetData(e.newValue);
-                    else activeSchedule = [...mockSchedule];
+                if (e.key === 'google_sheet_csv_url' || e.key === 'sim_mode' || e.key === 'sim_time' || e.key === 'custom_announcement') {
+                    if (e.key === 'google_sheet_csv_url') {
+                        if (e.newValue) fetchLiveSheetData(e.newValue);
+                        else activeSchedule = [...mockSchedule];
+                    }
+                    updateDashboard(); 
                 }
-                updateDashboard(); // Force UI update instantly for Notes or Time Mode changes
             });
 
             setInterval(updateDashboard, 1000);
@@ -280,8 +250,22 @@ index_v7_content = """<!DOCTYPE html>
                     }
                     cols.push(value.trim());
 
-                    if (cols.length >= 5) {
-                        let startTime = cols[1]; let endTime = cols[2]; let category = cols[3]; let activity = cols[4];
+                    // --- SMART CSV PARSER (Finds time columns automatically) ---
+                    let timeStartIndex = -1;
+                    for(let j=0; j < cols.length; j++) {
+                        let testVal = cols[j];
+                        if (testVal && testVal.split(':').length === 3) testVal = testVal.split(':').slice(0, 2).join(':');
+                        if (/^\d{1,2}:\d{2}$/.test(testVal)) {
+                            timeStartIndex = j; break;
+                        }
+                    }
+
+                    if (timeStartIndex !== -1 && cols.length >= timeStartIndex + 3) {
+                        let startTime = cols[timeStartIndex];
+                        let endTime = cols[timeStartIndex + 1];
+                        let category = cols[timeStartIndex + 2] || "ALL CLASSES"; // Fallback for blank categories
+                        let activity = cols[timeStartIndex + 3] || "SESSION";
+                        
                         if (startTime && startTime.split(':').length === 3) startTime = startTime.split(':').slice(0, 2).join(':');
                         if (endTime && endTime.split(':').length === 3) endTime = endTime.split(':').slice(0, 2).join(':');
 
@@ -299,6 +283,20 @@ index_v7_content = """<!DOCTYPE html>
             let h = Math.floor(totalMinutes / 60) % 24;
             let m = totalMinutes % 60;
             return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+        }
+
+        // --- UPGRADED TIMER FORMATTER ---
+        function formatSecondsToMMSS(totalSeconds) {
+            if (totalSeconds < 0) totalSeconds = 0;
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+            
+            // If waiting time is over an hour, show HH:MM:SS instead of 300+ minutes
+            if (hours > 0) {
+                return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            }
+            return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
         }
 
         function updateDashboard() {
@@ -380,7 +378,7 @@ index_v7_content = """<!DOCTYPE html>
             if (upcomingSession) {
                 upcomingBox.style.display = 'flex';
                 
-                // Set Left Side (Next Session Info)
+                // Set Left Side
                 document.getElementById('top-next-name').textContent = upcomingSession.category;
                 document.getElementById('top-next-act').textContent = `${upcomingSession.activity} @ ${upcomingSession.startTime}`;
 
@@ -405,45 +403,36 @@ index_v7_content = """<!DOCTYPE html>
                 let panelClass = "";
 
                 if (secsToGateOpen > 0) {
-                    // Not Open Yet
                     gateStatusTxt.textContent = "OPENS IN";
                     gateTimerTxt.textContent = formatSecondsToMMSS(secsToGateOpen);
-                    panelClass = ""; // default dark grey
+                    panelClass = "";
                 } else if (secsToGateClose > 0) {
-                    // Gate is OPEN, counting down to CLOSE
                     gateStatusTxt.textContent = "CLOSES IN";
                     gateTimerTxt.textContent = formatSecondsToMMSS(secsToGateClose);
                     
-                    // Flashing Rules (Warning if < 5 mins to close)
                     if (secsToGateClose <= 10) {
-                        panelClass = "gate-flash-fast"; // Last 10s continuous blink
+                        panelClass = "gate-flash-fast";
                     } else if (secsToGateClose <= 300) {
-                        // Flash for 3 seconds every 30 seconds
                         let m30 = secsToGateClose % 30;
-                        if (m30 === 0 || m30 >= 28) {
-                            panelClass = "gate-flash-red";
-                        } else {
-                            panelClass = "gate-open-solid";
-                        }
+                        if (m30 === 0 || m30 >= 28) panelClass = "gate-flash-red";
+                        else panelClass = "gate-open-solid";
                     } else {
-                        panelClass = "gate-open-solid"; // Solid green line
+                        panelClass = "gate-open-solid";
                     }
                 } else {
-                    // Gate Closed
                     gateStatusTxt.textContent = "CLOSED";
                     gateTimerTxt.textContent = "00:00";
                     panelClass = "gate-closed";
                 }
                 
                 gatePanel.className = `upcoming-right ${panelClass}`;
-
             } else {
                 upcomingBox.style.display = 'none';
             }
 
-            // --- BOTTOM TICKER LOGIC (Note vs Custom Announcement) ---
+            // --- BOTTOM TICKER LOGIC ---
             const customNote = localStorage.getItem('custom_announcement') || "";
-            const cycleSec = currentSecondsValue % 300; // 5 min cycle (300 sec)
+            const cycleSec = currentSecondsValue % 300; 
             
             const tickerContainer = document.getElementById('bottom-ticker-box');
             const tickerLabel = document.getElementById('ticker-label');
@@ -451,7 +440,6 @@ index_v7_content = """<!DOCTYPE html>
 
             let tickerHtml = "";
 
-            // If we have a custom note AND we are in the last 1 minute of the 5-min cycle
             if (customNote && cycleSec >= 240) {
                 tickerContainer.classList.add('announcement-active');
                 tickerLabel.textContent = "ANNOUNCEMENT";
@@ -459,7 +447,6 @@ index_v7_content = """<!DOCTYPE html>
             } else {
                 tickerContainer.classList.remove('announcement-active');
                 tickerLabel.textContent = "NOTE";
-                // Add upcoming session info to default note to make it look professional
                 let prefix = upcomingSession ? `NEXT: <span class="highlight-blue">${upcomingSession.category}</span> | ` : "";
                 tickerHtml = `${prefix}<span class="highlight-yellow">${GATE_NOTE_DEFAULT}</span> &nbsp;&nbsp;&nbsp;&nbsp; ${prefix}<span class="highlight-yellow">${GATE_NOTE_DEFAULT}</span>`;
             }
@@ -474,186 +461,6 @@ index_v7_content = """<!DOCTYPE html>
             const [hours, minutes] = timeStr.split(':').map(Number);
             return hours * 60 + minutes;
         }
-
-        function formatSecondsToMMSS(totalSeconds) {
-            if (totalSeconds < 0) totalSeconds = 0;
-            const minutes = Math.floor(totalSeconds / 60);
-            const seconds = totalSeconds % 60;
-            return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-        }
     </script>
 </body>
 </html>
-"""
-
-admin_v4_content = """<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Race Dashboard - Staff Admin Panel</title>
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0c0c0e; color: #ffffff; padding: 40px 20px; }
-        .admin-box { max-width: 600px; margin: 0 auto 30px auto; background: #141418; border: 1px solid #2e2e38; border-radius: 8px; padding: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
-        h1 { color: #ffcc00; font-size: 1.8rem; margin-bottom: 20px; text-transform: uppercase; border-bottom: 2px solid #ffcc00; padding-bottom: 10px; }
-        p { color: #a0a0ab; font-size: 0.95rem; margin-bottom: 20px; line-height: 1.5; }
-        .input-group { margin-bottom: 20px; }
-        label { display: block; color: #ffcc00; font-size: 0.85rem; font-weight: bold; text-transform: uppercase; margin-bottom: 8px; }
-        input[type="text"], input[type="time"] { width: 100%; background-color: #0a0a0c; border: 1px solid #444; color: #fff; padding: 12px; border-radius: 4px; font-size: 0.95rem; margin-bottom: 15px; }
-        .btn { background-color: #ffcc00; color: #000; border: none; padding: 12px 24px; border-radius: 4px; font-weight: bold; cursor: pointer; text-transform: uppercase; width: 100%; font-size: 1rem; transition: background 0.2s; }
-        .btn:hover { background-color: #e6b800; }
-        .status-msg { margin-top: 15px; font-weight: bold; font-size: 0.9rem; text-align: center; }
-        
-        .test-box { border-color: #E43138; }
-        .test-box h1 { color: #E43138; border-bottom-color: #E43138; }
-        .radio-group { display: flex; gap: 20px; margin-bottom: 15px; }
-        
-        .note-box { border-color: #2196f3; }
-        .note-box h1 { color: #2196f3; border-bottom-color: #2196f3; }
-        .note-box .btn { background-color: #2196f3; color: #fff; }
-        .note-box .btn:hover { background-color: #1976d2; }
-
-        #auth-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #0c0c0e; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; }
-        .auth-card { background: #141418; padding: 40px; border-radius: 8px; text-align: center; border: 1px solid #2e2e38; max-width: 400px; }
-        .user-info { display: flex; justify-content: space-between; align-items: center; background: #22222a; padding: 10px; border-radius: 4px; margin-bottom: 20px; font-size: 0.85rem; }
-        .btn-logout { background: transparent; color: #ff5252; border: none; cursor: pointer; font-weight: bold; text-transform: uppercase; }
-    </style>
-</head>
-<body>
-
-    <div id="auth-overlay">
-        <div class="auth-card">
-            <h2 style="color:#ffcc00; margin-bottom: 15px; text-transform: uppercase;">Staff Authentication</h2>
-            <div style="display: flex; justify-content: center; margin-top: 20px;">
-                <div id="g_id_onload" data-client_id="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com" data-context="signin" data-ux_mode="popup" data-callback="handleCredentialResponse" data-auto_prompt="false"></div>
-                <div class="g_id_signin" data-type="standard" data-shape="rounded" data-theme="dark" data-text="signin_with" data-size="large" data-logo_alignment="left"></div>
-            </div>
-            <div id="auth-error" style="color: #ff5252; margin-top: 15px; font-weight: bold; font-size: 0.9rem;"></div>
-        </div>
-    </div>
-
-    <!-- MAIN DATA SOURCE PANEL -->
-    <div class="admin-box">
-        <h1>Live Setup Panel</h1>
-        <div class="user-info">
-            <span>Logged in as: <strong id="user-email" style="color:#00e676;">admin@gmail.com</strong></span>
-            <button class="btn-logout" onclick="logout()">Logout</button>
-        </div>
-        <div class="input-group">
-            <label>Google Sheets Published CSV URL</label>
-            <input type="text" id="sheet-url" placeholder="https://docs.google.com/spreadsheets/d/.../pub?output=csv">
-            <button class="btn" onclick="saveNewSource()">Broadcast to Dashboards</button>
-        </div>
-        <div class="status-msg" id="admin-status"></div>
-    </div>
-
-    <!-- CUSTOM ANNOUNCEMENT PANEL -->
-    <div class="admin-box note-box">
-        <h1>📢 Track Announcement</h1>
-        <p>Enter a custom note to display on the dashboard ticker. This will override the default Gate Note for <strong>1 minute, every 5 minutes</strong> automatically.</p>
-        <div class="input-group">
-            <label>Custom Announcement Note</label>
-            <input type="text" id="custom-note" placeholder="E.g., All Junior MAX drivers please report to briefing room.">
-            <button class="btn" onclick="saveAnnouncement()">Update Announcement</button>
-        </div>
-        <div class="status-msg" id="note-status"></div>
-    </div>
-
-    <!-- TEST MODE PANEL -->
-    <div class="admin-box test-box">
-        <h1>⚙️ Simulate Time</h1>
-        <p>Control the time displayed on the dashboard to test Gate flashing rules and Marquee rotations.</p>
-        <div class="radio-group">
-            <label><input type="radio" name="time-mode" value="real" checked onchange="updateSimMode()"> Real Local Time</label>
-            <label><input type="radio" name="time-mode" value="sim" onchange="updateSimMode()"> Simulate Time</label>
-        </div>
-        <div class="input-group">
-            <label>Set Simulated Time (HH:MM)</label>
-            <input type="time" id="sim-time-input" value="13:54" onchange="updateSimMode()">
-        </div>
-        <div class="status-msg" id="sim-status" style="color:#E43138;"></div>
-    </div>
-
-    <script>
-        const ALLOWED_STAFF = ["your-email@gmail.com", "staff1@gmail.com", "racecontrol@gmail.com"];
-
-        setTimeout(bypassAuth, 500); 
-
-        function bypassAuth() {
-            document.getElementById('auth-overlay').style.display = 'none';
-            document.getElementById('user-email').textContent = "test-staff@gmail.com";
-            loadSettings();
-        }
-        
-        function handleCredentialResponse(response) {
-            // Auth logic
-        }
-
-        function loadSettings() {
-            const savedUrl = localStorage.getItem('google_sheet_csv_url');
-            if (savedUrl) document.getElementById('sheet-url').value = savedUrl;
-
-            const savedNote = localStorage.getItem('custom_announcement');
-            if (savedNote) document.getElementById('custom-note').value = savedNote;
-
-            const mode = localStorage.getItem('sim_mode') || 'real';
-            const time = localStorage.getItem('sim_time') || '13:54';
-            document.querySelector(`input[name="time-mode"][value="${mode}"]`).checked = true;
-            document.getElementById('sim-time-input').value = time;
-        }
-
-        function saveNewSource() {
-            const url = document.getElementById('sheet-url').value.trim();
-            const statusBox = document.getElementById('admin-status');
-            
-            if (!url) {
-                localStorage.removeItem('google_sheet_csv_url');
-                statusBox.textContent = "Cleared data source. Reverted to mock data.";
-                statusBox.style.color = "#ffcc00";
-                return;
-            }
-            if (!url.includes("output=csv") && !url.includes(".csv")) {
-                statusBox.textContent = "❌ ERROR: URL must be a Published CSV format link.";
-                statusBox.style.color = "#E43138";
-                return;
-            }
-            localStorage.setItem('google_sheet_csv_url', url);
-            statusBox.textContent = "✔ Live Source Broadcasted Successfully!";
-            statusBox.style.color = "#00e676";
-        }
-
-        function saveAnnouncement() {
-            const note = document.getElementById('custom-note').value.trim();
-            localStorage.setItem('custom_announcement', note);
-            const statusBox = document.getElementById('note-status');
-            statusBox.textContent = note ? "✔ Announcement broadcasted! Check Dashboard." : "✔ Announcement cleared (Running default rules only).";
-            statusBox.style.color = "#00e676";
-            setTimeout(() => { statusBox.textContent = ""; }, 3000);
-        }
-
-        function updateSimMode() {
-            const mode = document.querySelector('input[name="time-mode"]:checked').value;
-            const time = document.getElementById('sim-time-input').value;
-            localStorage.setItem('sim_mode', mode);
-            localStorage.setItem('sim_time', time);
-            
-            const statusBox = document.getElementById('sim-status');
-            statusBox.textContent = mode === 'sim' ? `Dashboard SIMULATING time at ${time}.` : "Dashboard returned to REAL time.";
-            if (mode !== 'sim') statusBox.style.color = "#a0a0ab";
-        }
-
-        function logout() { location.reload(); }
-    </script>
-</body>
-</html>
-"""
-
-with open("index.html", "w", encoding="utf-8") as f:
-    f.write(index_v7_content)
-
-with open("admin.html", "w", encoding="utf-8") as f:
-    f.write(admin_v4_content)
-
-print("Files completely updated with perfect top layout and bottom ticker.")
