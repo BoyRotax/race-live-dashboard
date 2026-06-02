@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Race Dashboard - Staff Admin Panel</title>
+    <!-- Load Google Identity Services SDK -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0c0c0e;
+            color: #ffffff;
+            padding: 40px 20px;
+        }
+        .admin-box {
+            max-width: 600px;
+            margin: 0 auto 30px auto;
+            background: #141418;
+            border: 1px solid #2e2e38;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+        h1 { color: #ffcc00; font-size: 1.8rem; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #ffcc00; padding-bottom: 10px; }
+        p { color: #a0a0ab; font-size: 0.95rem; margin-bottom: 20px; line-height: 1.5; }
+        .input-group { margin-bottom: 20px; }
+        label { display: block; color: #ffcc00; font-size: 0.85rem; font-weight: bold; text-transform: uppercase; margin-bottom: 8px; }
+        input[type="text"], input[type="time"] {
+            width: 100%;
+            background-color: #0a0a0c;
+            border: 1px solid #444;
+            color: #fff;
+            padding: 12px;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+        .btn {
+            background-color: #ffcc00;
+            color: #000;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            width: 100%;
+            font-size: 1rem;
+            transition: background 0.2s;
+        }
+        .btn:hover { background-color: #e6b800; }
+        .status-msg { margin-top: 15px; font-weight: bold; font-size: 0.9rem; text-align: center; }
+        
+        /* Test Mode Box */
+        .test-box {
+            border-color: #E43138;
+        }
+        .test-box h1 {
+            color: #E43138;
+            border-bottom-color: #E43138;
+        }
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+        
+        /* Auth Screen overlay */
+        #auth-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #0c0c0e; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 9999;
+        }
+        .auth-card {
+            background: #141418; padding: 40px; border-radius: 8px;
+            text-align: center; border: 1px solid #2e2e38; max-width: 400px;
+        }
+        .user-info { display: flex; justify-content: space-between; align-items: center; background: #22222a; padding: 10px; border-radius: 4px; margin-bottom: 20px; font-size: 0.85rem; }
+        .btn-logout { background: transparent; color: #ff5252; border: none; cursor: pointer; font-weight: bold; text-transform: uppercase; }
+    </style>
+</head>
+<body>
+
+    <div id="auth-overlay">
+        <div class="auth-card">
+            <h2 style="color:#ffcc00; margin-bottom: 15px; text-transform: uppercase;">Staff Authentication</h2>
+            <p>Please sign in with your Staff Google Account.</p>
+            <div style="display: flex; justify-content: center; margin-top: 20px;">
+                <div id="g_id_onload" data-client_id="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com" data-context="signin" data-ux_mode="popup" data-callback="handleCredentialResponse" data-auto_prompt="false"></div>
+                <div class="g_id_signin" data-type="standard" data-shape="rounded" data-theme="dark" data-text="signin_with" data-size="large" data-logo_alignment="left"></div>
+            </div>
+            <div id="auth-error" style="color: #ff5252; margin-top: 15px; font-weight: bold; font-size: 0.9rem;"></div>
+        </div>
+    </div>
+
+    <!-- MAIN DATA SOURCE PANEL -->
+    <div class="admin-box">
+        <h1>Live Setup Panel</h1>
+        
+        <div class="user-info">
+            <span>Logged in as: <strong id="user-email" style="color:#00e676;">admin@gmail.com</strong></span>
+            <button class="btn-logout" onclick="logout()">Logout</button>
+        </div>
+
+        <div class="input-group">
+            <label for="sheet-url">Google Sheets Published CSV URL</label>
+            <input type="text" id="sheet-url" placeholder="https://docs.google.com/spreadsheets/d/.../pub?output=csv">
+            <button class="btn" onclick="saveNewSource()">Broadcast to Dashboards</button>
+        </div>
+        <div class="status-msg" id="admin-status"></div>
+    </div>
+
+    <!-- TEST MODE PANEL -->
+    <div class="admin-box test-box">
+        <h1>Simulate Dashboard Time</h1>
+        <p>Control the time displayed on the index dashboard to test rules (e.g., 1-min urgent blink, 2-min Qualifying rule).</p>
+        
+        <div class="radio-group">
+            <label><input type="radio" name="time-mode" value="real" checked onchange="updateSimMode()"> Real Local Time</label>
+            <label><input type="radio" name="time-mode" value="sim" onchange="updateSimMode()"> Simulate Time</label>
+        </div>
+        
+        <div class="input-group">
+            <label>Set Simulated Time (HH:MM)</label>
+            <input type="time" id="sim-time-input" value="13:24" onchange="updateSimMode()">
+        </div>
+        <div class="status-msg" id="sim-status" style="color:#E43138;"></div>
+    </div>
+
+    <script>
+        const ALLOWED_STAFF = ["your-email@gmail.com", "staff1@gmail.com", "racecontrol@gmail.com"];
+
+        setTimeout(bypassAuth, 500); 
+
+        function bypassAuth() {
+            document.getElementById('auth-overlay').style.display = 'none';
+            document.getElementById('user-email').textContent = "test-staff@gmail.com";
+            loadSettings();
+        }
+        
+        function handleCredentialResponse(response) {
+            const base64Url = response.credential.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+
+            const profile = JSON.parse(jsonPayload);
+            const userEmail = profile.email;
+
+            if (ALLOWED_STAFF.includes(userEmail)) {
+                document.getElementById('auth-overlay').style.display = 'none';
+                document.getElementById('user-email').textContent = userEmail;
+                loadSettings();
+            } else {
+                document.getElementById('auth-error').textContent = `Access Denied.`;
+                google.accounts.id.disableAutoSelect();
+            }
+        }
+
+        function loadSettings() {
+            const savedUrl = localStorage.getItem('google_sheet_csv_url');
+            if (savedUrl) document.getElementById('sheet-url').value = savedUrl;
+
+            const mode = localStorage.getItem('sim_mode') || 'real';
+            const time = localStorage.getItem('sim_time') || '13:24';
+            
+            document.querySelector(`input[name="time-mode"][value="${mode}"]`).checked = true;
+            document.getElementById('sim-time-input').value = time;
+        }
+
+        function saveNewSource() {
+            const url = document.getElementById('sheet-url').value.trim();
+            const statusBox = document.getElementById('admin-status');
+            
+            if (!url) {
+                localStorage.removeItem('google_sheet_csv_url');
+                statusBox.textContent = "Cleared data source. Dashboards reverted to default mock data.";
+                statusBox.style.color = "#ffcc00";
+                return;
+            }
+
+            if (!url.includes("output=csv") && !url.includes(".csv")) {
+                statusBox.textContent = "❌ ERROR: URL must be a Published CSV format link.";
+                statusBox.style.color = "#E43138";
+                return;
+            }
+
+            localStorage.setItem('google_sheet_csv_url', url);
+            statusBox.textContent = "✔ Live Source Broadcasted Successfully!";
+            statusBox.style.color = "#00e676";
+        }
+
+        function updateSimMode() {
+            const mode = document.querySelector('input[name="time-mode"]:checked').value;
+            const time = document.getElementById('sim-time-input').value;
+            
+            localStorage.setItem('sim_mode', mode);
+            localStorage.setItem('sim_time', time);
+            
+            const statusBox = document.getElementById('sim-status');
+            if (mode === 'sim') {
+                statusBox.textContent = `Dashboard is currently SIMULATING time at ${time}.`;
+            } else {
+                statusBox.textContent = "Dashboard returned to REAL time.";
+                statusBox.style.color = "#a0a0ab";
+            }
+        }
+
+        function logout() { location.reload(); }
+    </script>
+</body>
+</html>
