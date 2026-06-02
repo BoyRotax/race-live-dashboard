@@ -1,0 +1,517 @@
+index_v3_content = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Race Live Schedule & Countdown Dashboard</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0a0a0c;
+            color: #ffffff;
+            overflow: hidden; /* Prevent scrolling for TV display */
+            padding: 20px 20px 80px 20px; /* Added bottom padding to make room for fixed ticker */
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Styles */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid #ffcc00;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .logo-title h1 {
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #ffffff;
+        }
+        
+        .logo-title span {
+            color: #ffcc00;
+        }
+
+        .local-time-container {
+            text-align: right;
+        }
+
+        .time-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            color: #8a8a93;
+            letter-spacing: 1px;
+        }
+
+        .digital-clock {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #ffcc00;
+            text-shadow: 0 0 10px rgba(255, 204, 0, 0.3);
+            line-height: 1;
+        }
+
+        /* Main Display Area */
+        .main-display {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .session-card {
+            background: linear-gradient(145deg, #111e16, #141418);
+            border-left: 12px solid #00e676;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(0, 230, 118, 0.15);
+            position: relative;
+        }
+
+        .session-status {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 20px;
+            background-color: #00e676;
+            color: #000;
+        }
+
+        .category-name {
+            font-size: 4.5rem;
+            font-weight: 900;
+            color: #ffffff;
+            line-height: 1.1;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .activity-name {
+            font-size: 2.8rem;
+            color: #ffcc00;
+            font-weight: 700;
+            margin-top: 10px;
+            text-transform: uppercase;
+        }
+
+        .countdown-box {
+            margin-top: 35px;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 30px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #222;
+        }
+
+        .countdown-label {
+            font-size: 2rem;
+            text-transform: uppercase;
+            color: #a0a0ab;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .countdown-timer {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 7.5rem;
+            font-weight: bold;
+            color: #00e676;
+            text-shadow: 0 0 20px rgba(0, 230, 118, 0.4);
+            line-height: 1;
+        }
+
+        /* 2-Minute Warning Alert Style */
+        .qualifying-warning-box {
+            margin-top: 25px;
+            background-color: #d50000;
+            color: #ffffff;
+            padding: 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 0 20px rgba(213, 0, 0, 0.6);
+            animation: pulse-red 1s infinite alternate;
+            display: none;
+        }
+
+        @keyframes pulse-red {
+            from { background-color: #d50000; box-shadow: 0 0 15px rgba(213, 0, 0, 0.6); }
+            to { background-color: #ff1744; box-shadow: 0 0 30px rgba(255, 23, 68, 0.9); }
+        }
+
+        /* --- TICKER / MARQUEE (Fixed at Bottom) --- */
+        .ticker-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background-color: #141418;
+            border-top: 3px solid #2196f3;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            z-index: 1000;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.8);
+            transition: background-color 0.3s;
+        }
+
+        /* 1-Minute Urgent Blink Class */
+        .ticker-container.urgent-blink {
+            animation: urgent-ticker-pulse 1s infinite alternate;
+            border-top: 3px solid #ff1744;
+        }
+
+        @keyframes urgent-ticker-pulse {
+            from { background-color: #3b0000; }
+            to { background-color: #d50000; }
+        }
+
+        .ticker-label {
+            background-color: #2196f3;
+            color: #ffffff;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 0 30px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+            z-index: 2;
+            font-size: 1.4rem;
+            letter-spacing: 1.5px;
+            box-shadow: 5px 0 15px rgba(0,0,0,0.7);
+        }
+
+        .urgent-blink .ticker-label {
+            background-color: #ff1744; /* Change label to red when blinking */
+        }
+
+        .ticker-content-wrapper {
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            height: 100%;
+        }
+
+        .ticker-text {
+            white-space: nowrap;
+            padding-left: 100%;
+            display: inline-block;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #ffffff;
+            text-transform: uppercase;
+            animation: ticker-move 25s linear infinite;
+        }
+
+        .ticker-text span.highlight-blue { color: #2196f3; font-weight: 800; }
+        .ticker-text span.highlight-yellow { color: #ffcc00; font-weight: 800; }
+        
+        .urgent-blink .ticker-text span.highlight-blue { color: #ffffff; }
+
+        @keyframes ticker-move {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
+        }
+
+        /* Tester Controls */
+        .sim-panel {
+            background-color: #13131a;
+            border: 1px dashed #444;
+            padding: 8px 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 0.85rem;
+        }
+        .sim-panel input[type="time"] { background: #000; border: 1px solid #666; color: #fff; padding: 2px 5px; }
+
+        .no-session {
+            text-align: center;
+            padding: 80px;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #8a8a93;
+            background-color: #141418;
+            border-radius: 12px;
+            border: 2px dashed #444;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <!-- Tester / Simulation Row -->
+        <div class="sim-panel">
+            <span style="color: #ffcc00; font-weight: bold;">⚙️ TEST MODE:</span>
+            <label><input type="radio" name="time-mode" value="real" checked> Real Time</label>
+            <label><input type="radio" name="time-mode" value="sim"> Simulate:</label>
+            <input type="time" id="sim-time-input" value="13:24">
+            <span style="color: #8a8a93;">(Tip: Set to 13:24 to test the 1-Min Ticker Blink. Set to 16:06 to test Qualifying Warning)</span>
+        </div>
+
+        <header>
+            <div class="logo-title">
+                <h1>RMC Thailand <span>Live Dashboard</span></h1>
+            </div>
+            <div class="local-time-container">
+                <div class="time-label">Local Time</div>
+                <div class="digital-clock" id="local-clock">00:00:00</div>
+            </div>
+        </header>
+
+        <!-- MAIN ACTIVE DISPLAY -->
+        <main class="main-display">
+            
+            <div id="current-session-box" class="session-card">
+                <span class="session-status">ON TRACK NOW</span>
+                
+                <div class="category-name" id="curr-category">LOADING...</div>
+                <div class="activity-name" id="curr-activity">-</div>
+                
+                <!-- 2-Minute Rule Alert Box for Qualifying Practice -->
+                <div class="qualifying-warning-box" id="qualifying-warning">
+                    ⚠️ WARNING: Drivers must be on track 2 minutes after Qualifying Practice started!
+                </div>
+
+                <div class="countdown-box">
+                    <span class="countdown-label">Time Remaining</span>
+                    <span class="countdown-timer" id="curr-countdown">00:00</span>
+                </div>
+            </div>
+
+            <!-- Fallback if race day ends -->
+            <div id="no-session-box" class="no-session" style="display: none;">
+                🏁 ALL SESSIONS COMPLETED FOR TODAY
+            </div>
+
+        </main>
+    </div>
+
+    <!-- FIXED TICKER AT THE BOTTOM -->
+    <div class="ticker-container" id="upcoming-ticker-box">
+        <div class="ticker-label">NEXT SESSION</div>
+        <div class="ticker-content-wrapper">
+            <div class="ticker-text" id="ticker-dynamic-text">
+                Loading upcoming race data...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Updated Mock Data to match RMC Thailand 2026 Round 3 (Saturday) image
+        const mockSchedule = [
+            { startTime: "08:00", endTime: "08:20", category: "MICRO MAX / MINI MAX", activity: "REGISTRATION" },
+            { startTime: "08:30", endTime: "08:50", category: "JUNIOR MAX", activity: "REGISTRATION" },
+            { startTime: "08:50", endTime: "09:10", category: "SENIOR MAX / MASTERS", activity: "REGISTRATION" },
+            { startTime: "12:15", endTime: "12:45", category: "LUNCH BREAK", activity: "LUNCH BREAK" },
+            { startTime: "12:50", endTime: "13:20", category: "DRIVER BRIEFING", activity: "ALL DRIVERS" },
+            { startTime: "13:25", endTime: "13:40", category: "MICRO MAX / MICRO ROOKIE", activity: "OFFICIAL PRACTICE #1" },
+            { startTime: "13:45", endTime: "14:00", category: "MINI MAX / MINI ROOKIE", activity: "OFFICIAL PRACTICE #1" },
+            { startTime: "14:05", endTime: "14:20", category: "JUNIOR MAX", activity: "OFFICIAL PRACTICE #1" },
+            { startTime: "14:25", endTime: "14:40", category: "SENIOR MAX / MASTERS", activity: "OFFICIAL PRACTICE #1" },
+            { startTime: "16:05", endTime: "16:11", category: "MICRO MAX / MICRO ROOKIE", activity: "QUALIFYING PRACTICE" },
+            { startTime: "16:20", endTime: "16:26", category: "MINI MAX / MINI ROOKIE", activity: "QUALIFYING PRACTICE" }
+        ];
+
+        let activeSchedule = [...mockSchedule];
+        const GATE_NOTE = "⚠️ NOTE: Start servicing park gate will be OPEN 15 MINS before the start of the categories and will be CLOSE 5 MINS before the start of the categories.";
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedUrl = localStorage.getItem('google_sheet_csv_url');
+            if (savedUrl) fetchLiveSheetData(savedUrl);
+            
+            window.addEventListener('storage', (e) => {
+                if (e.key === 'google_sheet_csv_url') {
+                    if (e.newValue) fetchLiveSheetData(e.newValue);
+                    else activeSchedule = [...mockSchedule];
+                }
+            });
+
+            setInterval(updateDashboard, 1000);
+            updateDashboard();
+        });
+
+        async function fetchLiveSheetData(url) {
+            try {
+                const response = await fetch(url);
+                const dataText = await response.text();
+                const lines = dataText.split(/\\r?\\n/);
+                const parsedSessions = [];
+                
+                for (let i = 0; i < lines.length; i++) {
+                    const cols = lines[i].split(',').map(c => c.replace(/^"|"$/g, '').trim());
+                    if (cols.length >= 5) {
+                        const startTime = cols[1];
+                        const endTime = cols[2];
+                        const category = cols[3];
+                        const activity = cols[4];
+                        if (/^\\d{1,2}:\\d{2}$/.test(startTime) && /^\\d{1,2}:\\d{2}$/.test(endTime)) {
+                            parsedSessions.push({ startTime, endTime, category, activity });
+                        }
+                    }
+                }
+                if (parsedSessions.length > 0) activeSchedule = parsedSessions;
+            } catch (e) {
+                console.error("Live fetch failed:", e);
+            }
+        }
+
+        function updateDashboard() {
+            const timeMode = document.querySelector('input[name="time-mode"]:checked').value;
+            let currentDisplayDate = new Date();
+            
+            if (timeMode === 'sim') {
+                const simTimeStr = document.getElementById('sim-time-input').value;
+                const [sHours, sMinutes] = simTimeStr.split(':').map(Number);
+                currentDisplayDate.setHours(sHours, sMinutes, currentDisplayDate.getSeconds()); 
+            }
+
+            const hrs = String(currentDisplayDate.getHours()).padStart(2, '0');
+            const mins = String(currentDisplayDate.getMinutes()).padStart(2, '0');
+            const secs = String(currentDisplayDate.getSeconds()).padStart(2, '0');
+            document.getElementById('local-clock').textContent = `${hrs}:${mins}:${secs}`;
+
+            const currentMinutesOfDay = currentDisplayDate.getHours() * 60 + currentDisplayDate.getMinutes();
+            const currentSecondsValue = currentMinutesOfDay * 60 + currentDisplayDate.getSeconds();
+
+            let currentSession = null;
+            let upcomingSession = null;
+
+            const sortedSchedule = [...activeSchedule].sort((a,b) => timeToMinutes(a.startTime) - timeToMinutes(b.startTime));
+
+            for (let session of sortedSchedule) {
+                const startMins = timeToMinutes(session.startTime);
+                const endMins = timeToMinutes(session.endTime);
+
+                if (currentMinutesOfDay >= startMins && currentMinutesOfDay < endMins) {
+                    currentSession = session;
+                } else if (startMins > currentMinutesOfDay && !upcomingSession) {
+                    upcomingSession = session;
+                }
+            }
+
+            if (!currentSession && !upcomingSession) {
+                document.getElementById('current-session-box').style.display = 'none';
+                document.getElementById('upcoming-ticker-box').style.display = 'none';
+                document.getElementById('no-session-box').style.display = 'block';
+                return;
+            }
+
+            document.getElementById('no-session-box').style.display = 'none';
+
+            // --- CURRENT SESSION LOGIC ---
+            if (currentSession) {
+                document.getElementById('current-session-box').style.display = 'block';
+                document.getElementById('curr-category').textContent = currentSession.category;
+                document.getElementById('curr-activity').textContent = currentSession.activity;
+
+                const endSecondsTotal = timeToMinutes(currentSession.endTime) * 60;
+                const remainingSeconds = endSecondsTotal - currentSecondsValue;
+                document.getElementById('curr-countdown').textContent = formatSecondsToMMSS(remainingSeconds);
+
+                if (currentSession.activity.trim() === "QUALIFYING PRACTICE" || currentSession.activity.trim() === "Qualifying Practice") {
+                    const startSecondsTotal = timeToMinutes(currentSession.startTime) * 60;
+                    const elapsedSeconds = currentSecondsValue - startSecondsTotal;
+
+                    if (elapsedSeconds >= 0 && elapsedSeconds <= 120) {
+                        document.getElementById('qualifying-warning').style.display = 'block';
+                    } else {
+                        document.getElementById('qualifying-warning').style.display = 'none';
+                    }
+                } else {
+                    document.getElementById('qualifying-warning').style.display = 'none';
+                }
+            } else {
+                document.getElementById('current-session-box').style.display = 'block';
+                document.getElementById('curr-category').textContent = "TRACK CLEAR";
+                document.getElementById('curr-activity').textContent = "WAITING FOR NEXT SESSION";
+                document.getElementById('curr-countdown').textContent = "00:00";
+                document.getElementById('qualifying-warning').style.display = 'none';
+            }
+
+            // --- UPCOMING TICKER LOGIC (Fixed at bottom & 1-min blink) ---
+            const tickerBox = document.getElementById('upcoming-ticker-box');
+            if (upcomingSession) {
+                tickerBox.style.display = 'flex';
+                
+                const nextStartSecondsTotal = timeToMinutes(upcomingSession.startTime) * 60;
+                const secondsUntilStart = nextStartSecondsTotal - currentSecondsValue;
+                const countdownStr = formatSecondsToMMSS(secondsUntilStart);
+
+                // Check for 1-minute (60 seconds) warning to trigger blink effect
+                if (secondsUntilStart <= 60 && secondsUntilStart > 0) {
+                    tickerBox.classList.add('urgent-blink');
+                } else {
+                    tickerBox.classList.remove('urgent-blink');
+                }
+
+                // Construct text combining upcoming session details + The Rule Note
+                const tickerHtml = `<span class="highlight-blue">${upcomingSession.category}</span> - ${upcomingSession.activity} | STARTS AT: <span class="highlight-yellow">${upcomingSession.startTime}</span> | COUNTDOWN: <span class="highlight-yellow">${countdownStr}</span> &nbsp;&nbsp;&nbsp;&nbsp; 🔴 ${GATE_NOTE} 🔴 &nbsp;&nbsp;&nbsp;&nbsp;`;
+                
+                const tickerElem = document.getElementById('ticker-dynamic-text');
+                if (tickerElem.dataset.lastContent !== countdownStr) {
+                    tickerElem.innerHTML = tickerHtml;
+                    tickerElem.dataset.lastContent = countdownStr;
+                }
+            } else {
+                tickerBox.style.display = 'none';
+                tickerBox.classList.remove('urgent-blink');
+            }
+        }
+
+        function timeToMinutes(timeStr) {
+            const [hours, minutes] = timeStr.split(':').map(Number);
+            return hours * 60 + minutes;
+        }
+
+        function formatSecondsToMMSS(totalSeconds) {
+            if (totalSeconds < 0) totalSeconds = 0;
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+    </script>
+</body>
+</html>
+"""
+
+with open("index.html", "w", encoding="utf-8") as f:
+    f.write(index_v3_content)
+
+print("Index V3 with fixed ticker, 1-min blink, and gate note generated successfully.")
