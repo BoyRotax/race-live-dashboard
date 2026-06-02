@@ -168,7 +168,9 @@
             try {
                 const response = await fetch(url);
                 const dataText = await response.text();
-                const lines = dataText.split(/\r?\n/);
+                const lines = dataText.split(/
+?
+/);
                 const parsedSessions = [];
                 
                 for (let i = 0; i < lines.length; i++) {
@@ -205,7 +207,6 @@
             } catch (e) { console.error("Live fetch failed:", e); }
         }
 
-        // ANTI-CRASH TIME FUNCTION
         function timeToMinutes(timeStr) {
             if (!timeStr || typeof timeStr !== 'string' || !timeStr.includes(':')) return 0;
             const parts = timeStr.split(':');
@@ -343,12 +344,11 @@
                     upcomingBox.style.display = 'none';
                 }
 
-                // --- BOTTOM TICKER LOGIC ---
+                // --- BOTTOM TICKER LOGIC (UPGRADED) ---
                 let customNoteObj = null;
                 try { customNoteObj = JSON.parse(localStorage.getItem('custom_announcement')); } catch(e) {}
                 
                 const isGateNoteEnabled = localStorage.getItem('gate_note_enabled') !== 'false';
-                const cycleSec = currentSecondsValue % 300; 
                 const tickerContainer = document.getElementById('bottom-ticker-box');
                 const tickerLabel = document.getElementById('ticker-label');
                 const tickerElem = document.getElementById('ticker-dynamic-text');
@@ -359,7 +359,16 @@
                 if (customNoteObj && customNoteObj.text) {
                     const currentUnix = Math.floor(Date.now() / 1000);
                     const ageSec = currentUnix - customNoteObj.timestamp;
-                    if (ageSec < 60 || cycleSec >= 240) { showAnnouncement = true; }
+                    
+                    // ลอจิกใหม่: 60 วิแรกโชว์ค้าง หลังจากนั้น สลับโชว์ 30 วินาที
+                    if (ageSec < 60) {
+                        showAnnouncement = true;
+                    } else {
+                        const cycleSec = currentSecondsValue % 60; 
+                        if (cycleSec >= 30) { // โชว์นาทีที่ 30-59 ของทุกนาที
+                            showAnnouncement = true;
+                        }
+                    }
                 }
 
                 if (showAnnouncement) {
