@@ -56,7 +56,7 @@
         
         .qualifying-warning-box { margin-top: 25px; background-color: #E43138; color: #ffffff; padding: 25px; border-radius: 8px; font-weight: bold; text-align: center; font-size: 1.8rem; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 0 20px rgba(229, 49, 56, 0.6); animation: pulse-red 1s infinite alternate; display: none; }
         @keyframes pulse-red { from { background-color: #E43138; box-shadow: 0 0 15px rgba(229, 49, 56, 0.6); } to { background-color: #ff5258; box-shadow: 0 0 30px rgba(229, 49, 56, 0.9); } }
-        .no-session { text-align: center; padding: 80px; font-size: 2.5rem; font-weight: bold; color: #E43138; background-color: #141418; border-radius: 12px; border: 2px dashed #444; }
+        .no-session { text-align: center; padding: 80px; font-size: 2.5rem; font-weight: bold; color: #8a8a93; background-color: #141418; border-radius: 12px; border: 2px dashed #444; }
 
         /* BOTTOM TICKER */
         .ticker-container { position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; background-color: #141418; border-top: 3px solid #ffcc00; display: flex; align-items: center; overflow: hidden; z-index: 1000; box-shadow: 0 -5px 20px rgba(0,0,0,0.8); }
@@ -111,7 +111,7 @@
             <div id="current-session-box" class="session-card">
                 <span class="session-status">ON TRACK NOW</span>
                 <div class="category-name" id="curr-category">TRACK CLEAR</div>
-                <div class="activity-name" id="curr-activity">WAITING FOR DATA...</div>
+                <div class="activity-name" id="curr-activity">LOADING DATA...</div>
                 <div class="qualifying-warning-box" id="qualifying-warning">
                     ⚠️ WARNING: Drivers must be on track 2 minutes after Qualifying Practice started!
                 </div>
@@ -121,7 +121,7 @@
                 </div>
             </div>
             <div id="no-session-box" class="no-session" style="display: none;">
-                ❌ DISCONNECTED: CHECK GOOGLE SHEETS LINK
+                🏁 ALL SESSIONS COMPLETED FOR TODAY
             </div>
         </main>
     </div>
@@ -143,35 +143,30 @@
             }
         }
 
-        // Changed Mock Data so you know instantly if the link is broken
-        const mockSchedule = [];
-        let activeSchedule = [...mockSchedule];
+        // --- HARDCODED GOOGLE SHEETS LINK (PUBLIC ACCESS) ---
+        const PUBLIC_SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQlcikWcSFvrRueWMXoafe6-wbX2MTjY3-AonOD_g81iaxJrpPRDVfUd7rj5epXiQO8wCySwP05O9e_/pub?gid=1146288813&single=true&output=csv";
+        
+        let activeSchedule = [];
         const GATE_NOTE_DEFAULT = "Start servicing park gate will be OPEN 15 MINS before the start of the categories and will be CLOSE 5 MINS before the start of the categories.";
 
         window.addEventListener('DOMContentLoaded', () => {
-            const savedUrl = localStorage.getItem('google_sheet_csv_url');
-            if (savedUrl) fetchLiveSheetData(savedUrl);
+            // ดึงข้อมูลทันทีเมื่อเปิดหน้าเว็บ โดยใช้ลิงก์ที่ฝังไว้
+            fetchLiveSheetData(PUBLIC_SHEET_URL);
             
-            window.addEventListener('storage', (e) => {
-                if (e.key === 'google_sheet_csv_url') {
-                    if (e.newValue) fetchLiveSheetData(e.newValue);
-                    else activeSchedule = [...mockSchedule];
-                }
-                updateDashboard(); 
-            });
+            // อัปเดตข้อมูลทุกๆ 1 นาที (60000ms) เผื่อมีการแก้เวลาใน Sheet จะได้เด้งเปลี่ยนอัตโนมัติ
+            setInterval(() => fetchLiveSheetData(PUBLIC_SHEET_URL), 60000);
+            
+            // ให้ลอจิกหน้าปัดทำงานทุกวินาที
             setInterval(updateDashboard, 1000);
             updateDashboard();
         });
 
         async function fetchLiveSheetData(url) {
             try {
-                // Add Cache Buster to force fresh data every time
-                const fetchUrl = url + (url.includes('?') ? '&' : '?') + 'nocache=' + new Date().getTime();
+                const fetchUrl = url + '&nocache=' + new Date().getTime();
                 const response = await fetch(fetchUrl);
                 const dataText = await response.text();
                 
-                // --- ADVANCED BULLETPROOF CSV PARSER ---
-                // Handles newlines (Alt+Enter) inside cells
                 const rows = [];
                 let row = [];
                 let inQuote = false;
@@ -180,24 +175,26 @@
                     let char = dataText[i];
                     if (inQuote) {
                         if (char === '"') {
-                            if (dataText[i + 1] === '"') { val += '"'; i++; } // Escaped quote
+                            if (dataText[i + 1] === '"') { val += '"'; i++; } 
                             else { inQuote = false; }
                         } else { val += char; }
                     } else {
                         if (char === '"') { inQuote = true; }
                         else if (char === ',') { row.push(val); val = ''; }
-                        else if (char === '\n') { row.push(val); rows.push(row); row = []; val = ''; }
-                        else if (char !== '\r') { val += char; }
+                        else if (char === '
+') { row.push(val); rows.push(row); row = []; val = ''; }
+                        else if (char !== '
+') { val += char; }
                     }
                 }
                 row.push(val); rows.push(row);
-                // ---------------------------------------
 
                 const parsedSessions = [];
-                let lastValidCategory = "ALL DRIVERS"; // To inherit blank merged cells
+                let lastValidCategory = "ALL DRIVERS"; 
                 
                 for (let i = 0; i < rows.length; i++) {
-                    let cols = rows[i].map(c => c.trim().replace(/\n/g, " ")); // Clean up inner newlines
+                    let cols = rows[i].map(c => c.trim().replace(/
+/g, " ")); 
                     if (cols.length < 2) continue;
 
                     let timeStartIndex = -1;
@@ -213,12 +210,8 @@
                         let category = cols[timeStartIndex + 2]; 
                         let activity = cols[timeStartIndex + 3] || "SESSION";
                         
-                        // INHERIT CATEGORY IF BLANK
-                        if (!category || category === "") {
-                            category = lastValidCategory;
-                        } else {
-                            lastValidCategory = category;
-                        }
+                        if (!category || category === "") category = lastValidCategory;
+                        else lastValidCategory = category;
                         
                         if (startTime && startTime.split(':').length === 3) startTime = startTime.split(':').slice(0, 2).join(':');
                         if (endTime && endTime.split(':').length === 3) endTime = endTime.split(':').slice(0, 2).join(':');
@@ -228,9 +221,7 @@
                         }
                     }
                 }
-                if (parsedSessions.length > 0) {
-                    activeSchedule = parsedSessions;
-                }
+                if (parsedSessions.length > 0) activeSchedule = parsedSessions;
             } catch (e) { console.error("Live fetch failed:", e); }
         }
 
@@ -288,12 +279,7 @@
                 const currentMinutesOfDay = currentDisplayDate.getHours() * 60 + currentDisplayDate.getMinutes();
                 const currentSecondsValue = currentMinutesOfDay * 60 + currentDisplayDate.getSeconds();
 
-                if (activeSchedule.length === 0) {
-                    document.getElementById('current-session-box').style.display = 'none';
-                    document.getElementById('upcoming-modules-box').style.display = 'none';
-                    document.getElementById('no-session-box').style.display = 'block';
-                    return;
-                }
+                if (activeSchedule.length === 0) return; // Wait for data
                 document.getElementById('no-session-box').style.display = 'none';
 
                 let currentSession = null;
@@ -386,14 +372,10 @@
                 if (customNoteObj && customNoteObj.text) {
                     const currentUnix = Math.floor(Date.now() / 1000);
                     const ageSec = currentUnix - customNoteObj.timestamp;
-                    
-                    if (ageSec < 60) {
-                        showAnnouncement = true;
-                    } else {
+                    if (ageSec < 60) { showAnnouncement = true; } 
+                    else {
                         const cycleSec = currentSecondsValue % 60; 
-                        if (cycleSec >= 30) { 
-                            showAnnouncement = true;
-                        }
+                        if (cycleSec >= 30) { showAnnouncement = true; }
                     }
                 }
 
@@ -420,9 +402,7 @@
                     tickerElem.innerHTML = tickerHtml;
                     tickerElem.dataset.lastContent = tickerHtml;
                 }
-            } catch (err) {
-                console.error("Dashboard update error prevented crash:", err);
-            }
+            } catch (err) { console.error("Update error:", err); }
         }
     </script>
 </body>
