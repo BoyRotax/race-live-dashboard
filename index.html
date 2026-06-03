@@ -19,46 +19,62 @@
         .time-label { font-size: 0.75rem; text-transform: uppercase; color: #8a8a93; }
         .digital-clock { font-family: 'Courier New', Courier, monospace; font-size: 1.8rem; font-weight: bold; color: #ffcc00; line-height: 1; }
 
-        /* UPCOMING TOP BAR */
-        .upcoming-top-bar { display: flex; flex-direction: column; background-color: #141418; border: 2px solid #333; border-radius: 8px; box-shadow: 0 8px 25px rgba(0,0,0,0.5); overflow: hidden; margin-bottom: 15px; }
-        .upcoming-left { padding: 12px 15px; background: linear-gradient(135deg, #1e88e5, #1565c0); color: #fff; }
-        .upcoming-left-label { font-size: 0.75rem; font-weight: bold; color: rgba(255,255,255,0.8); letter-spacing: 1px; margin-bottom: 5px; }
-        .top-next-name { font-size: 1.4rem; font-weight: 900; text-transform: uppercase; line-height: 1.2; }
-        .top-next-act { font-size: 0.9rem; font-weight: 700; color: #ffcc00; text-transform: uppercase; }
+        /* 🏁 3-COLUMN TOP BAR GRID */
+        .top-bar-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin-bottom: 20px; }
         
-        /* 🛠️ UPGRADED TOP BAR RIGHT */
-        .upcoming-right { padding: 12px 15px; display: flex; flex-direction: column; justify-content: center; background-color: #1a1a24; border-top: 1px solid #333; gap: 10px; transition: all 0.3s ease; }
-        .gate-panel-content { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        .top-col { border-radius: 8px; padding: 15px 20px; display: flex; flex-direction: column; justify-content: center; box-shadow: 0 8px 20px rgba(0,0,0,0.4); position: relative; overflow: hidden; }
+        .col-header { font-size: 0.85rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 5px; }
+        .col-cat { font-size: 1.8rem; font-weight: 900; line-height: 1.1; margin-bottom: 5px; text-transform: uppercase; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .col-act { font-size: 1rem; font-weight: 700; text-transform: uppercase; }
         
-        .service-park-badge { width: 100%; background-color: #ffcc00; color: #000; padding: 8px; border-radius: 4px; font-weight: 900; font-size: 1rem; text-transform: uppercase; text-align: center; animation: pulse-sp 1s infinite alternate; }
-        @keyframes pulse-sp { from { background-color: #ffcc00; box-shadow: 0 0 10px rgba(255,204,0,0.3); } to { background-color: #ffe066; box-shadow: 0 0 20px rgba(255,204,0,0.8); } }
-        
-        .no-gate-msg { width: 100%; text-align: center; color: #8a8a93; font-weight: 800; font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; }
+        /* 🟦 LEFT: NEXT SESSION */
+        .col-next { background: linear-gradient(135deg, #1e88e5, #1565c0); border: 2px solid #1976d2; }
+        .col-next .col-header { color: rgba(255,255,255,0.8); }
+        .col-next .col-act { color: #ffcc00; }
+        .sp-open-badge { margin-top: 10px; background: rgba(0,0,0,0.3); padding: 4px 10px; border-radius: 4px; display: inline-block; width: fit-content; font-size: 0.85rem; font-weight: bold; color: #fff; }
 
-        .gate-title { font-size: 1rem; font-weight: 800; color: #a0a0ab; text-transform: uppercase; }
-        .gate-times { font-size: 0.8rem; color: #8a8a93; margin-top: 2px; }
-        .gate-times strong { color: #fff; font-size: 0.9rem; }
-        
-        .gate-timer-box { display: flex; flex-direction: column; align-items: flex-end; justify-content: center; }
-        .gate-status-text { font-size: 0.75rem; font-weight: 800; color: #fff; text-transform: uppercase; margin-bottom: 3px; }
-        .gate-countdown-timer { font-family: 'Courier New', Courier, monospace; font-size: 1.8rem; font-weight: 900; color: #a0a0ab; line-height: 1; white-space: nowrap; }
+        /* ⬛ MIDDLE: SERVICE PARK GATE */
+        .col-gate { background: #1a1a24; border: 2px solid #333; transition: all 0.3s ease; }
+        .col-gate .col-header { color: #a0a0ab; }
+        .col-gate .col-cat { color: #fff; font-size: 1.4rem; }
+        .gate-time-row { color: #8a8a93; font-size: 0.85rem; font-weight: 600; margin-bottom: 10px; }
+        .gate-time-row strong { color: #fff; }
+        .gate-bottom { display: flex; justify-content: space-between; align-items: flex-end; margin-top: auto; }
+        .gate-status-text { font-size: 0.85rem; font-weight: 800; text-transform: uppercase; }
+        .gate-timer { font-family: 'Courier New', Courier, monospace; font-size: 2.2rem; font-weight: 900; line-height: 1; }
 
-        /* GATE DYNAMIC STATUS CLASSES */
-        .gate-open-solid { border-left: 5px solid #00e676; background-color: #122217; }
-        .gate-open-solid .gate-title { color: #00e676; }
-        .gate-open-solid .gate-countdown-timer { color: #00e676; text-shadow: 0 0 10px rgba(0, 230, 118, 0.3); }
+        /* Gate Dynamic States */
+        .gate-default .gate-status-text { color: #fff; }
+        .gate-default .gate-timer { color: #a0a0ab; }
         
-        .gate-closed { border-left: 5px solid #E43138; opacity: 0.8; }
-        .gate-closed .gate-countdown-timer { color: #E43138; }
-        
-        .gate-warning-solid { border-left: 5px solid #E43138; background-color: #3a0d0f; }
-        .gate-warning-solid .gate-title { color: #ff5258; }
-        .gate-warning-solid .gate-status-text { color: #ff5258; }
-        .gate-warning-solid .gate-countdown-timer { color: #E43138; text-shadow: 0 0 15px rgba(229, 49, 56, 0.5); }
-        
-        .gate-flash-fast { animation: gate-fast-flash 0.5s infinite alternate !important; border-left: 5px solid #E43138; }
-        .gate-flash-fast * { color: #ffffff !important; text-shadow: none !important; }
+        .gate-open { border-color: #00e676; background: #122217; }
+        .gate-open .col-header { color: #00e676; }
+        .gate-open .gate-status-text { color: #fff; }
+        .gate-open .gate-timer { color: #00e676; text-shadow: 0 0 10px rgba(0,230,118,0.3); }
+
+        .gate-warning { border-color: #E43138; background: #3a0d0f; }
+        .gate-warning .col-header, .gate-warning .gate-status-text { color: #ff5258; }
+        .gate-warning .gate-timer { color: #E43138; text-shadow: 0 0 15px rgba(229,49,56,0.5); }
+
+        .gate-flash { animation: gate-fast-flash 0.5s infinite alternate !important; border-color: #E43138; }
+        .gate-flash * { color: #ffffff !important; text-shadow: none !important; }
         @keyframes gate-fast-flash { from { background-color: #E43138; } to { background-color: #1a1a24; } }
+
+        /* 🟨 RIGHT: ON SERVICE PARK */
+        .col-sp { background: #1a1a24; border: 2px solid #333; }
+        .col-sp .col-header { color: #555; }
+        .col-sp .col-cat { color: #555; }
+        .sp-bottom { display: flex; justify-content: space-between; align-items: flex-end; margin-top: auto; }
+        .sp-status-text { font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #555; }
+        .sp-timer { font-family: 'Courier New', Courier, monospace; font-size: 2.2rem; font-weight: 900; line-height: 1; color: #555; }
+
+        /* SP Active State */
+        .sp-active { border-color: #ffcc00; background: linear-gradient(135deg, #2a2400, #1a1a00); animation: glow-sp 2s infinite alternate; }
+        .sp-active .col-header { color: #ffcc00; }
+        .sp-active .col-cat { color: #ffffff; }
+        .sp-active .sp-status-text { color: #ffcc00; }
+        .sp-active .sp-timer { color: #ffcc00; text-shadow: 0 0 15px rgba(255,204,0,0.4); }
+        @keyframes glow-sp { from { box-shadow: 0 0 10px rgba(255,204,0,0.1); } to { box-shadow: 0 0 25px rgba(255,204,0,0.6); } }
 
         /* MAIN ON TRACK */
         .main-display { flex: 1; display: flex; flex-direction: column; justify-content: center; }
@@ -70,8 +86,10 @@
         .countdown-label { font-size: 1.1rem; text-transform: uppercase; color: #a0a0ab; font-weight: 600; }
         .countdown-timer { font-family: 'Courier New', Courier, monospace; font-size: 3.2rem; font-weight: bold; color: #00e676; line-height: 1; }
         
-        .qualifying-warning-box { margin-top: 15px; background-color: #E43138; color: #ffffff; padding: 15px; border-radius: 6px; font-weight: bold; text-align: center; font-size: 1.1rem; text-transform: uppercase; animation: pulse-red 1s infinite alternate; display: none; }
-        @keyframes pulse-red { from { background-color: #E43138; } to { background-color: #ff5258; } }
+        /* 🚨 QUALIFYING WARNING */
+        .qualifying-warning-box { margin-top: 15px; background-color: #E43138; color: #ffffff; padding: 15px; border-radius: 6px; font-weight: bold; text-align: center; font-size: 1.1rem; text-transform: uppercase; animation: pulse-red-fast 0.4s infinite alternate; display: none; }
+        @keyframes pulse-red-fast { from { background-color: #E43138; box-shadow: 0 0 10px rgba(229,49,56,0.6); } to { background-color: #ff0000; box-shadow: 0 0 30px rgba(255,0,0,1); } }
+        
         .no-session { text-align: center; padding: 40px; font-size: 1.4rem; font-weight: bold; color: #8a8a93; background-color: #141418; border-radius: 8px; border: 2px dashed #444; }
 
         /* BOTTOM TICKER */
@@ -89,18 +107,17 @@
         @media (min-width: 992px) {
             body { padding: 25px 25px 90px 25px; } header { margin-bottom: 25px; }
             .logo-title h1 { font-size: 2.5rem; } .digital-clock { font-size: 3.5rem; }
-            .upcoming-top-bar { flex-direction: row; min-height: 110px; }
-            .upcoming-left { min-width: 35%; display: flex; flex-direction: column; justify-content: center; border-right: 3px solid #0a0a0c; }
-            .top-next-name { font-size: 2.2rem; } .top-next-act { font-size: 1.2rem; }
             
-            .upcoming-right { padding: 15px 30px; border-top: none; gap: 15px; }
-            .service-park-badge { font-size: 1.4rem; padding: 10px; border-radius: 6px; }
-            .no-gate-msg { font-size: 1.4rem; }
+            .top-bar-grid { grid-template-columns: repeat(3, 1fr); gap: 15px; }
+            .col-header { font-size: 1rem; }
+            .col-cat { font-size: 2rem; }
+            .col-act { font-size: 1.1rem; }
+            .sp-open-badge { font-size: 0.95rem; }
             
-            .gate-title { font-size: 1.6rem; } 
-            .gate-times { font-size: 1.2rem; margin-top: 5px; } .gate-times strong { font-size: 1.4rem; }
-            .gate-status-text { font-size: 1.4rem; margin-bottom: 5px; }
-            .gate-countdown-timer { font-size: 3.2rem; }
+            .col-gate .col-cat { font-size: 1.6rem; }
+            .gate-time-row { font-size: 1rem; } .gate-time-row strong { font-size: 1.1rem; }
+            .gate-status-text, .sp-status-text { font-size: 1.1rem; }
+            .gate-timer, .sp-timer { font-size: 3rem; }
             
             .session-card { padding: 40px; border-left-width: 12px; }
             .category-name { font-size: 4.5rem; } .activity-name { font-size: 2.8rem; }
@@ -126,32 +143,36 @@
             </div>
         </header>
 
-        <div class="upcoming-top-bar" id="upcoming-modules-box" style="display: none;">
-            <div class="upcoming-left">
-                <div class="upcoming-left-label">NEXT SESSION</div>
-                <div class="top-next-name" id="top-next-name">LOADING...</div>
-                <div class="top-next-act" id="top-next-act">-</div>
+        <div class="top-bar-grid" id="top-bar-grid" style="display: none;">
+            
+            <div class="top-col col-next">
+                <div class="col-header">NEXT SESSION</div>
+                <div class="col-cat" id="next-cat">LOADING...</div>
+                <div class="col-act" id="next-act">-</div>
+                <div class="sp-open-badge" id="next-badge">WAITING DATA</div>
             </div>
-            <div class="upcoming-right" id="gate-panel">
-                <div id="service-park-badge" class="service-park-badge" style="display: none;">
-                    🏁 ON SERVICE PARK: <span id="sp-category-name">--</span>
-                </div>
-                
-                <div id="gate-panel-content" class="gate-panel-content" style="display: none;">
-                    <div>
-                        <div class="gate-title">SERVICE PARK GATE</div>
-                        <div class="gate-times">OPEN: <strong id="gate-time-open">--:--</strong> &nbsp;|&nbsp; CLOSE: <strong id="gate-time-close">--:--</strong></div>
-                    </div>
-                    <div class="gate-timer-box">
-                        <span class="gate-status-text" id="gate-status-text">STATUS</span>
-                        <span class="gate-countdown-timer" id="gate-countdown-timer">00:00</span>
-                    </div>
-                </div>
 
-                <div id="no-gate-msg" class="no-gate-msg" style="display: none;">
-                    NO SERVICE PARK GATE REQUIRED
+            <div class="top-col col-gate gate-default" id="gate-col">
+                <div class="col-header">SERVICE PARK GATE</div>
+                <div class="col-cat" id="gate-cat">-</div>
+                <div class="gate-time-row" id="gate-time-row">
+                    OPEN: <strong id="g-open">--:--</strong> &nbsp;|&nbsp; CLOSE: <strong id="g-close">--:--</strong>
+                </div>
+                <div class="gate-bottom">
+                    <div class="gate-status-text" id="gate-status">STATUS</div>
+                    <div class="gate-timer" id="gate-timer">00:00</div>
                 </div>
             </div>
+
+            <div class="top-col col-sp" id="sp-col">
+                <div class="col-header">ON SERVICE PARK</div>
+                <div class="col-cat" id="sp-cat">CLEAR</div>
+                <div class="sp-bottom">
+                    <div class="sp-status-text" id="sp-status">STARTS IN</div>
+                    <div class="sp-timer" id="sp-timer">00:00</div>
+                </div>
+            </div>
+
         </div>
 
         <main class="main-display">
@@ -159,7 +180,7 @@
                 <span class="session-status">ON TRACK NOW</span>
                 <div class="category-name" id="curr-category">TRACK CLEAR</div>
                 <div class="activity-name" id="curr-activity">LOADING DATA...</div>
-                <div class="qualifying-warning-box" id="qualifying-warning">⚠️ WARNING: Drivers must be on track 2 minutes after Qualifying Practice started!</div>
+                <div class="qualifying-warning-box" id="qualifying-warning">⚠️ WARNING: ON TRACK 2 MINUTES</div>
                 <div class="countdown-box">
                     <span class="countdown-label">Time Remaining</span>
                     <span class="countdown-timer" id="curr-countdown">00:00</span>
@@ -182,10 +203,7 @@
             else { if (document.exitFullscreen) { document.exitFullscreen(); document.getElementById('fs-btn').textContent = "⛶ Fullscreen"; } }
         }
 
-        // ==========================================
         const PUBLIC_SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQlcikWcSFvrRueWMXoafe6-wbX2MTjY3-AonOD_g81iaxJrpPRDVfUd7rj5epXiQO8wCySwP05O9e_/pub?output=csv";
-        // ==========================================
-        
         let activeSchedule = [];
         let sheetAnnouncement = { text: "", time: "" }; 
         const GATE_NOTE_DEFAULT = "Start servicing park gate will be OPEN 15 MINS before the start of the categories and will be CLOSE 5 MINS before the start of the categories.";
@@ -193,22 +211,15 @@
         window.addEventListener('DOMContentLoaded', () => {
             const targetUrl = localStorage.getItem('google_sheet_csv_url') || PUBLIC_SHEET_URL;
             fetchLiveSheetData(targetUrl);
-            
-            setInterval(() => {
-                const currentUrl = localStorage.getItem('google_sheet_csv_url') || PUBLIC_SHEET_URL;
-                fetchLiveSheetData(currentUrl);
-            }, 15000); 
-            
+            setInterval(() => { fetchLiveSheetData(localStorage.getItem('google_sheet_csv_url') || PUBLIC_SHEET_URL); }, 15000); 
             window.addEventListener('storage', (e) => {
                 if (e.key === 'google_sheet_csv_url') fetchLiveSheetData(e.newValue || PUBLIC_SHEET_URL);
                 updateDashboard();
             });
-
             setInterval(updateDashboard, 1000);
             updateDashboard();
         });
 
-        // 🛡️ ป้องกันบั๊กเคาะบรรทัด (Alt+Enter) 100%
         function parseCSVFull(dataText) {
             const rows = []; let row = []; let inQuote = false; let val = '';
             for (let i = 0; i < dataText.length; i++) {
@@ -224,7 +235,7 @@
                 }
             }
             row.push(val.trim()); rows.push(row);
-            return rows.map(r => r.map(c => c.replace(/\n/g, " "))); // แปลง Enter ให้เป็นช่องว่างแทน
+            return rows.map(r => r.map(c => c.replace(/\n/g, " "))); 
         }
 
         async function fetchLiveSheetData(url) {
@@ -295,7 +306,6 @@
             return `${String(Math.floor(totalMinutes / 60) % 24).padStart(2, '0')}:${String(totalMinutes % 60).padStart(2, '0')}`;
         }
 
-        // 🌟 ถ้านานกว่า 1 ชม. ให้แสดงเป็น Xh XXm XXs
         function formatSecondsToMMSS(totalSeconds) {
             if (totalSeconds < 0) totalSeconds = 0;
             const hours = Math.floor(totalSeconds / 3600);
@@ -336,33 +346,28 @@
                 if (activeSchedule.length === 0) return;
 
                 let currentSession = null; 
-                let serviceParkSession = null; 
+                let spSession = null; 
                 let upcomingSession = null;
                 const sortedSchedule = [...activeSchedule].sort((a,b) => timeToMinutes(a.startTime) - timeToMinutes(b.startTime));
 
                 for (let session of sortedSchedule) {
                     const startMins = timeToMinutes(session.startTime);
                     const endMins = timeToMinutes(session.endTime);
-                    
-                    // เช็คว่าเป็นรุ่นแข่ง (MAX) หรือไม่ ถ้าใช่ให้คำนวณ Service Park
-                    const hasGate = session.category.toUpperCase().includes("MAX");
-                    const gateCloseMins = hasGate ? startMins - 5 : startMins;
+                    const isMax = session.category.toUpperCase().includes("MAX");
 
                     if (currentMinutesOfDay >= startMins && currentMinutesOfDay < endMins) {
                         currentSession = session;
-                    } else if (currentMinutesOfDay >= gateCloseMins && currentMinutesOfDay < startMins) {
-                        // 🏎️ เวลาปัจจุบันอยู่ในช่วง 5 นาทีก่อนเริ่มแข่ง -> รุ่นนี้กำลังรอใน Service Park!
-                        if (hasGate) {
-                            serviceParkSession = session;
-                        } else {
+                    } else if (startMins > currentMinutesOfDay) {
+                        // เช็ค 5 นาทีก่อนเริ่มของรุ่น MAX ให้ย้ายเข้า Service Park (จอขวา)
+                        if (isMax && currentMinutesOfDay >= (startMins - 5) && currentMinutesOfDay < startMins) {
+                            spSession = session;
+                        } else if (!upcomingSession) {
                             upcomingSession = session;
                         }
-                    } else if (startMins > currentMinutesOfDay && !upcomingSession) {
-                        upcomingSession = session;
                     }
                 }
 
-                // --- CURRENT (CENTER BOX) ---
+                // --- CURRENT (ON TRACK) ---
                 if (currentSession) {
                     document.getElementById('current-session-box').style.display = 'block';
                     document.getElementById('curr-category').textContent = currentSession.category;
@@ -370,7 +375,7 @@
                     const endSecondsTotal = timeToMinutes(currentSession.endTime) * 60;
                     document.getElementById('curr-countdown').textContent = formatSecondsToMMSS(endSecondsTotal - currentSecondsValue);
 
-                    if (currentSession.activity.trim().toUpperCase() === "QUALIFYING PRACTICE") {
+                    if (currentSession.activity.trim().toUpperCase().includes("QUALIFYING PRACTICE")) {
                         const elapsedSeconds = currentSecondsValue - (timeToMinutes(currentSession.startTime) * 60);
                         document.getElementById('qualifying-warning').style.display = (elapsedSeconds >= 0 && elapsedSeconds <= 120) ? 'block' : 'none';
                     } else { document.getElementById('qualifying-warning').style.display = 'none'; }
@@ -381,102 +386,106 @@
                     document.getElementById('qualifying-warning').style.display = 'none';
                 }
 
-                // --- UPCOMING TOP BAR (LEFT & RIGHT) ---
-                const upcomingBox = document.getElementById('upcoming-modules-box');
-                const spBadge = document.getElementById('service-park-badge');
-                const gatePanelContent = document.getElementById('gate-panel-content');
-                const noGateMsg = document.getElementById('no-gate-msg');
-                const gatePanel = document.getElementById('gate-panel');
-
-                if (upcomingSession || serviceParkSession) {
-                    upcomingBox.style.display = 'flex';
+                // --- TOP 3-COLUMN GRID ---
+                const topGrid = document.getElementById('top-bar-grid');
+                if (upcomingSession || spSession) {
+                    topGrid.style.display = 'grid';
                     
-                    // ตั้งค่าด้านซ้าย (Left) เป็น Upcoming Session เสมอ
+                    // 🟦 LEFT: NEXT SESSION
                     if (upcomingSession) {
-                        document.getElementById('top-next-name').textContent = upcomingSession.category;
-                        document.getElementById('top-next-act').textContent = `${upcomingSession.activity} @ ${upcomingSession.startTime}`;
-                    } else {
-                        document.getElementById('top-next-name').textContent = "NO MORE SESSIONS";
-                        document.getElementById('top-next-act').textContent = "-";
-                    }
-
-                    // ตั้งค่าด้านขวา (Right) - เช็คว่ามีใครอยู่ใน Service Park ไหม
-                    if (serviceParkSession) {
-                        spBadge.style.display = 'block';
-                        document.getElementById('sp-category-name').textContent = serviceParkSession.category;
-                    } else {
-                        spBadge.style.display = 'none';
-                    }
-
-                    // โชว์/ซ่อน การนับเวลาประตูของ Upcoming Session
-                    if (upcomingSession) {
-                        const hasGate = upcomingSession.category.toUpperCase().includes("MAX");
-                        if (hasGate) {
-                            gatePanelContent.style.display = 'flex';
-                            noGateMsg.style.display = 'none';
-
-                            const sessionStartMins = timeToMinutes(upcomingSession.startTime);
-                            const gateOpenMins = sessionStartMins - 15; const gateCloseMins = sessionStartMins - 5;
-                            const gateCloseSecs = gateCloseMins * 60; const gateOpenSecs = gateOpenMins * 60;
-
-                            document.getElementById('gate-time-open').textContent = formatTimeFromMinutes(gateOpenMins);
-                            document.getElementById('gate-time-close').textContent = formatTimeFromMinutes(gateCloseMins);
-
-                            const secsToGateOpen = gateOpenSecs - currentSecondsValue;
-                            const secsToGateClose = gateCloseSecs - currentSecondsValue;
-                            const gateStatusTxt = document.getElementById('gate-status-text');
-                            const gateTimerTxt = document.getElementById('gate-countdown-timer');
-
-                            let panelClass = "";
-                            if (secsToGateOpen > 0) { 
-                                gateStatusTxt.textContent = "OPENS IN"; 
-                                gateTimerTxt.textContent = formatSecondsToMMSS(secsToGateOpen); 
-                                panelClass = ""; 
-                            } else if (secsToGateClose > 0) {
-                                gateStatusTxt.textContent = "CLOSES IN"; 
-                                gateTimerTxt.textContent = formatSecondsToMMSS(secsToGateClose);
-                                
-                                // 🌟 ลอจิกการกระพริบใหม่
-                                if (secsToGateClose <= 60) {
-                                    panelClass = "gate-flash-fast"; // ต่ำกว่า 1 นาที -> กระพริบเร็ว
-                                } else if (secsToGateClose <= 180) {
-                                    panelClass = "gate-warning-solid"; // ต่ำกว่า 3 นาที -> แดงค้าง
-                                } else {
-                                    panelClass = "gate-open-solid"; // มากกว่า 3 นาที -> เขียวปกติ
-                                }
-                            } else { 
-                                gateStatusTxt.textContent = "CLOSED"; 
-                                gateTimerTxt.textContent = "00:00"; 
-                                panelClass = "gate-closed"; 
-                            }
-                            gatePanel.className = `upcoming-right ${panelClass}`;
+                        document.getElementById('next-cat').textContent = upcomingSession.category;
+                        document.getElementById('next-act').textContent = `${upcomingSession.activity} @ ${upcomingSession.startTime}`;
+                        if (upcomingSession.category.toUpperCase().includes("MAX")) {
+                            const openMins = timeToMinutes(upcomingSession.startTime) - 15;
+                            document.getElementById('next-badge').textContent = `SP OPENS @ ${formatTimeFromMinutes(openMins)}`;
+                            document.getElementById('next-badge').style.background = "rgba(0,0,0,0.3)";
                         } else {
-                            // ถ้าไม่ใช่รุ่น MAX -> ซ่อนเวลาปิดเปิด
-                            gatePanelContent.style.display = 'none';
-                            noGateMsg.style.display = 'block';
-                            gatePanel.className = 'upcoming-right';
+                            document.getElementById('next-badge').textContent = "NO GATE REQUIRED";
+                            document.getElementById('next-badge').style.background = "rgba(0,0,0,0.3)";
                         }
                     } else {
-                        gatePanelContent.style.display = 'none';
-                        noGateMsg.style.display = 'none';
-                        gatePanel.className = 'upcoming-right';
+                        document.getElementById('next-cat').textContent = "NONE";
+                        document.getElementById('next-act').textContent = "-";
+                        document.getElementById('next-badge').textContent = "";
+                        document.getElementById('next-badge').style.background = "transparent";
                     }
-                } else {
-                    upcomingBox.style.display = 'none';
+
+                    // ⬛ MIDDLE: GATE (เฉพาะรุ่น MAX)
+                    const gateCol = document.getElementById('gate-col');
+                    if (upcomingSession && upcomingSession.category.toUpperCase().includes("MAX")) {
+                        const sessionStartMins = timeToMinutes(upcomingSession.startTime);
+                        const gateOpenMins = sessionStartMins - 15; 
+                        const gateCloseMins = sessionStartMins - 5;
+                        
+                        document.getElementById('gate-cat').textContent = upcomingSession.category;
+                        document.getElementById('gate-time-row').style.display = 'block';
+                        document.getElementById('g-open').textContent = formatTimeFromMinutes(gateOpenMins);
+                        document.getElementById('g-close').textContent = formatTimeFromMinutes(gateCloseMins);
+
+                        const secsToGateOpen = (gateOpenMins * 60) - currentSecondsValue;
+                        const secsToGateClose = (gateCloseMins * 60) - currentSecondsValue;
+
+                        let panelClass = "col-gate ";
+                        if (secsToGateOpen > 0) { 
+                            document.getElementById('gate-status').textContent = "OPENS IN"; 
+                            document.getElementById('gate-timer').textContent = formatSecondsToMMSS(secsToGateOpen); 
+                            panelClass += "gate-default"; 
+                        }
+                        else if (secsToGateClose > 0) {
+                            document.getElementById('gate-status').textContent = "CLOSES IN"; 
+                            document.getElementById('gate-timer').textContent = formatSecondsToMMSS(secsToGateClose);
+                            
+                            // ลอจิกไฟกระพริบ: 3 นาทีแดงค้าง, 1 นาทีกระพริบ
+                            if (secsToGateClose <= 60) panelClass += "gate-flash";
+                            else if (secsToGateClose <= 180) panelClass += "gate-warning";
+                            else panelClass += "gate-open";
+                        } else { 
+                            document.getElementById('gate-status').textContent = "CLOSED"; 
+                            document.getElementById('gate-timer').textContent = "00:00"; 
+                            panelClass += "gate-closed"; 
+                        }
+                        gateCol.className = panelClass;
+                    } else {
+                        // กิจกรรมที่ไม่ใช่ MAX ปิดช่องเกท
+                        document.getElementById('gate-cat').textContent = upcomingSession ? upcomingSession.category : "-";
+                        document.getElementById('gate-time-row').style.display = 'none';
+                        document.getElementById('gate-status').textContent = "NOT REQUIRED"; 
+                        document.getElementById('gate-timer').textContent = "--:--"; 
+                        gateCol.className = "top-col col-gate gate-default";
+                    }
+
+                    // 🟨 RIGHT: ON SERVICE PARK
+                    const spCol = document.getElementById('sp-col');
+                    if (spSession) {
+                        document.getElementById('sp-cat').textContent = spSession.category;
+                        const startSecs = timeToMinutes(spSession.startTime) * 60;
+                        document.getElementById('sp-timer').textContent = formatSecondsToMMSS(startSecs - currentSecondsValue);
+                        spCol.className = "top-col col-sp sp-active";
+                    } else {
+                        document.getElementById('sp-cat').textContent = "CLEAR";
+                        document.getElementById('sp-timer').textContent = "00:00";
+                        spCol.className = "top-col col-sp";
+                    }
+
+                } else { 
+                    topGrid.style.display = 'none'; 
                 }
 
                 // --- BOTTOM TICKER LOGIC ---
+                let customNoteObj = null;
+                try { customNoteObj = JSON.parse(localStorage.getItem('custom_announcement')); } catch(e) {}
+                
+                const isGateNoteEnabled = localStorage.getItem('gate_note_enabled') !== 'false';
                 const tickerContainer = document.getElementById('bottom-ticker-box');
                 const tickerLabel = document.getElementById('ticker-label');
                 const tickerElem = document.getElementById('ticker-dynamic-text');
-                const isGateNoteEnabled = localStorage.getItem('gate_note_enabled') !== 'false';
-                
+
                 let tickerHtml = "";
                 let showAnnouncement = false;
 
                 if (sheetAnnouncement.text && sheetAnnouncement.text !== "") {
                     const cycleSec = currentDisplayDate.getSeconds(); 
-                    if (cycleSec >= 30) { showAnnouncement = true; } // สลับโชว์ครึ่งนาที
+                    if (cycleSec >= 30) { showAnnouncement = true; } 
                 }
 
                 if (showAnnouncement) {
@@ -491,7 +500,6 @@
                     let prefix = upcomingSession ? `NEXT: <span class="highlight-blue">${upcomingSession.category}</span> | ` : "";
                     let noteContent = "";
                     
-                    // เอา Service Park Note ขึ้นวิ่ง ก็ต่อเมื่อรุ่นถัดไปเป็นรุ่น MAX เท่านั้น
                     if (isGateNoteEnabled && upcomingSession && upcomingSession.category.toUpperCase().includes("MAX")) {
                         noteContent = GATE_NOTE_DEFAULT;
                     }
