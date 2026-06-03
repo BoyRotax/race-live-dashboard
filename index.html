@@ -6,26 +6,17 @@
     <title>Race Live Schedule & Countdown Dashboard</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #0a0a0c; color: #ffffff; overflow-x: hidden;
-            padding: 15px 15px 80px 15px; min-height: 100vh;
-            display: flex; flex-direction: column; position: relative;
-        }
-
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0a0a0c; color: #ffffff; overflow: hidden; padding: 15px 15px 80px 15px; min-height: 100vh; display: flex; flex-direction: column; position: relative; }
         .container { max-width: 1400px; margin: 0 auto; width: 100%; flex: 1; display: flex; flex-direction: column; }
-        
         .fullscreen-btn { position: fixed; top: 15px; right: 15px; background: rgba(255, 255, 255, 0.1); color: #fff; border: 1px solid rgba(255, 255, 255, 0.2); padding: 6px 10px; border-radius: 4px; cursor: pointer; opacity: 0.3; z-index: 2000; font-size: 0.75rem; text-transform: uppercase; }
         .fullscreen-btn:hover { opacity: 1; background: rgba(255, 255, 255, 0.2); }
-
         header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #ffcc00; padding-bottom: 10px; margin-bottom: 15px; }
         .logo-title h1 { font-size: 1.6rem; text-transform: uppercase; letter-spacing: 1px; color: #ffffff; }
         .logo-title span { color: #ffcc00; }
         .local-time-container { text-align: right; padding-right: 65px; }
         .time-label { font-size: 0.75rem; text-transform: uppercase; color: #8a8a93; }
         .digital-clock { font-family: 'Courier New', Courier, monospace; font-size: 1.8rem; font-weight: bold; color: #ffcc00; line-height: 1; }
-
-        /* UPCOMING TOP BAR */
+        
         .upcoming-top-bar { display: flex; flex-direction: column; background-color: #141418; border: 2px solid #333; border-radius: 8px; box-shadow: 0 8px 25px rgba(0,0,0,0.5); overflow: hidden; margin-bottom: 15px; }
         .upcoming-left { padding: 12px 15px; background: linear-gradient(135deg, #1e88e5, #1565c0); color: #fff; }
         .upcoming-left-label { font-size: 0.75rem; font-weight: bold; color: rgba(255,255,255,0.8); letter-spacing: 1px; }
@@ -48,7 +39,6 @@
         .gate-flash-fast { animation: gate-fast-flash 0.5s infinite alternate !important; }
         @keyframes gate-fast-flash { from { background-color: #E43138; } to { background-color: #1a1a24; } }
 
-        /* MAIN DISPLAY */
         .main-display { flex: 1; display: flex; flex-direction: column; justify-content: center; }
         .session-card { background: linear-gradient(145deg, #111e16, #141418); border-left: 8px solid #00e676; border-radius: 8px; padding: 20px; box-shadow: 0 15px 35px rgba(0, 230, 118, 0.15); }
         .session-status { display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; text-transform: uppercase; background-color: #00e676; color: #000; margin-bottom: 10px; }
@@ -61,7 +51,6 @@
         @keyframes pulse-red { from { background-color: #E43138; } to { background-color: #ff5258; } }
         .no-session { text-align: center; padding: 40px; font-size: 1.4rem; font-weight: bold; color: #8a8a93; background-color: #141418; border-radius: 8px; border: 2px dashed #444; }
 
-        /* BOTTOM TICKER */
         .ticker-container { position: fixed; bottom: 0; left: 0; width: 100%; height: 55px; background-color: #141418; border-top: 3px solid #ffcc00; display: flex; align-items: center; overflow: hidden; z-index: 1000; }
         .ticker-label { background-color: #ffcc00; color: #000; font-weight: 900; text-transform: uppercase; padding: 0 15px; height: 100%; display: flex; align-items: center; white-space: nowrap; z-index: 2; font-size: 1.1rem; letter-spacing: 1px; }
         .ticker-container.announcement-active { border-top-color: #2196f3; }
@@ -72,17 +61,14 @@
         .ticker-text span.highlight-yellow { color: #ffcc00; font-weight: 800; }
         @keyframes ticker-move { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
 
-        /* 💻 RESPONSIVE DESIGN: LARGE SCREEN (จอทีวีใหญ่ / แท็บเล็ตขยายใหญ่ขึ้นอัตโนมัติ) */
         @media (min-width: 992px) {
-            body { padding: 25px 25px 90px 25px; }
-            header { margin-bottom: 25px; }
-            .logo-title h1 { font-size: 2.5rem; }
-            .digital-clock { font-size: 3.5rem; }
+            body { padding: 25px 25px 90px 25px; } header { margin-bottom: 25px; }
+            .logo-title h1 { font-size: 2.5rem; } .digital-clock { font-size: 3.5rem; }
             .upcoming-top-bar { flex-direction: row; min-height: 110px; }
             .upcoming-left { min-width: 35%; display: flex; flex-direction: column; justify-content: center; border-right: 3px solid #0a0a0c; }
             .top-next-name { font-size: 2.2rem; } .top-next-act { font-size: 1.2rem; }
             .upcoming-right { padding: 15px 30px; border-top: none; }
-            .gate-title { font-size: 1.6rem; } .gate-times { font-size: 1.2rem; .gate-times strong { font-size: 1.4rem; } }
+            .gate-title { font-size: 1.6rem; } .gate-times { font-size: 1.2rem; } .gate-times strong { font-size: 1.4rem; }
             .gate-countdown-timer { font-size: 4rem; }
             .session-card { padding: 40px; border-left-width: 12px; }
             .category-name { font-size: 4.5rem; } .activity-name { font-size: 2.8rem; }
@@ -94,7 +80,6 @@
     </style>
 </head>
 <body>
-
     <button class="fullscreen-btn" onclick="toggleFullScreen()" id="fs-btn">⛶ Fullscreen</button>
 
     <div class="container">
@@ -108,7 +93,6 @@
             </div>
         </header>
 
-        <!-- TOP BAR -->
         <div class="upcoming-top-bar" id="upcoming-modules-box" style="display: none;">
             <div class="upcoming-left">
                 <div class="upcoming-left-label">NEXT SESSION</div>
@@ -118,10 +102,7 @@
             <div class="upcoming-right" id="gate-panel">
                 <div>
                     <div class="gate-title">SERVICE PARK GATE</div>
-                    <div class="gate-times">
-                        OPEN: <strong id="gate-time-open">--:--</strong> &nbsp;|&nbsp; 
-                        CLOSE: <strong id="gate-time-close">--:--</strong>
-                    </div>
+                    <div class="gate-times">OPEN: <strong id="gate-time-open">--:--</strong> &nbsp;|&nbsp; CLOSE: <strong id="gate-time-close">--:--</strong></div>
                 </div>
                 <div class="gate-timer-box">
                     <div><span class="gate-status-text" id="gate-status-text">STATUS</span></div>
@@ -135,80 +116,97 @@
                 <span class="session-status">ON TRACK NOW</span>
                 <div class="category-name" id="curr-category">TRACK CLEAR</div>
                 <div class="activity-name" id="curr-activity">LOADING DATA...</div>
-                <div class="qualifying-warning-box" id="qualifying-warning">
-                    ⚠️ WARNING: Drivers must be on track 2 minutes after Qualifying Practice started!
-                </div>
+                <div class="qualifying-warning-box" id="qualifying-warning">⚠️ WARNING: Drivers must be on track 2 minutes after Qualifying Practice started!</div>
                 <div class="countdown-box">
                     <span class="countdown-label">Time Remaining</span>
                     <span class="countdown-timer" id="curr-countdown">00:00</span>
                 </div>
             </div>
-            <div id="no-session-box" class="no-session" style="display: none;">
-                🏁 ALL SESSIONS COMPLETED FOR TODAY
-            </div>
+            <div id="no-session-box" class="no-session" style="display: none;">🏁 ALL SESSIONS COMPLETED FOR TODAY</div>
         </main>
     </div>
 
-    <!-- BOTTOM TICKER -->
     <div class="ticker-container" id="bottom-ticker-box">
         <div class="ticker-label" id="ticker-label">NOTE</div>
         <div class="ticker-content-wrapper">
-            <div class="ticker-text" id="ticker-dynamic-text">Waiting for notes...</div>
+            <div class="ticker-text" id="ticker-dynamic-text">Waiting for connection...</div>
         </div>
     </div>
 
     <script>
         function toggleFullScreen() {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen();
-                document.getElementById('fs-btn').textContent = "✖ Exit Fullscreen";
-            } else {
-                if (document.exitFullscreen) { document.exitFullscreen(); document.getElementById('fs-btn').textContent = "⛶ Fullscreen"; }
-            }
+            if (!document.fullscreenElement) { document.documentElement.requestFullscreen(); document.getElementById('fs-btn').textContent = "✖ Exit Fullscreen"; } 
+            else { if (document.exitFullscreen) { document.exitFullscreen(); document.getElementById('fs-btn').textContent = "⛶ Fullscreen"; } }
         }
 
-        const PUBLIC_SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQlcikWcSFvrRueWMXoafe6-wbX2MTjY3-AonOD_g81iaxJrpPRDVfUd7rj5epXiQO8wCySwP05O9e_/pub?gid=1146288813&single=true&output=csv";
+        const PUBLIC_SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQlcikWcSFvrRueWMXoafe6-wbX2MTjY3-AonOD_g81iaxJrpPRDVfUd7rj5epXiQO8wCySwP05O9e_/pub?output=csv";
         
         let activeSchedule = [];
-        let sheetAnnouncement = { text: "", time: "" }; // บันทึกค่าประกาศที่ดึงจากคอลัมน์ G ในชีต
+        let sheetAnnouncement = { text: "", time: "" }; 
         const GATE_NOTE_DEFAULT = "Start servicing park gate will be OPEN 15 MINS before the start of the categories and will be CLOSE 5 MINS before the start of the categories.";
 
         window.addEventListener('DOMContentLoaded', () => {
-            fetchLiveSheetData(PUBLIC_SHEET_URL);
-            setInterval(() => fetchLiveSheetData(PUBLIC_SHEET_URL), 2000); // ดึงข้อมูลทุก 15 วินาทีเพื่อให้ไวต่อการเปลี่ยนแปลง
+            const targetUrl = localStorage.getItem('google_sheet_csv_url') || PUBLIC_SHEET_URL;
+            fetchLiveSheetData(targetUrl);
+            
+            setInterval(() => {
+                const currentUrl = localStorage.getItem('google_sheet_csv_url') || PUBLIC_SHEET_URL;
+                fetchLiveSheetData(currentUrl);
+            }, 15000);
+            
+            window.addEventListener('storage', (e) => {
+                if (e.key === 'google_sheet_csv_url') {
+                    fetchLiveSheetData(e.newValue || PUBLIC_SHEET_URL);
+                }
+                updateDashboard();
+            });
+
             setInterval(updateDashboard, 1000);
             updateDashboard();
         });
 
+        function parseCSVRow(rowStr) {
+            let cols = []; let inQuote = false; let val = '';
+            for (let i = 0; i < rowStr.length; i++) {
+                let char = rowStr[i];
+                if (inQuote) { if (char === '"') { if (rowStr[i + 1] === '"') { val += '"'; i++; } else { inQuote = false; } } else { val += char; } } 
+                else { if (char === '"') { inQuote = true; } else if (char === ',') { cols.push(val.trim()); val = ''; } else if (char !== '\r') { val += char; } }
+            }
+            cols.push(val.trim());
+            return cols.map(c => c.replace(/\n/g, " ")); 
+        }
+
         async function fetchLiveSheetData(url) {
             try {
-                const fetchUrl = url + '&nocache=' + new Date().getTime();
+                const fetchUrl = url + (url.includes('?') ? '&' : '?') + 'nocache=' + new Date().getTime();
                 const response = await fetch(fetchUrl);
                 const dataText = await response.text();
                 
-                const rows = []; let row = []; let inQuote = false; let val = '';
-                for (let i = 0; i < dataText.length; i++) {
-                    let char = dataText[i];
-                    if (inQuote) {
-                        if (char === '"') { if (dataText[i + 1] === '"') { val += '"'; i++; } else { inQuote = false; } } else { val += char; }
-                    } else {
-                        if (char === '"') { inQuote = true; }
-                        else if (char === ',') { row.push(val); val = ''; }
-                        else if (char === '\n') { row.push(val); rows.push(row); row = []; val = ''; }
-                        else if (char Char !== '\r') { val += char; }
-                    }
-                }
-                row.push(val); rows.push(row);
-
+                const rawLines = dataText.split(/\r?\n/);
                 const parsedSessions = [];
                 let lastValidCategory = "ALL DRIVERS"; 
-                
-                // ตรวจเช็คค่าประกาศในคอลัมน์ G (ช่องเซลล์ G1 และ G2 ของแถวที่ 1 และ 2)
-                if (rows[0] && rows[0][6]) sheetAnnouncement.text = rows[0][6].trim(); else sheetAnnouncement.text = "";
-                if (rows[1] && rows[1][6]) sheetAnnouncement.time = rows[1][6].trim(); else sheetAnnouncement.time = "";
+                sheetAnnouncement = { text: "", time: "" };
+                let isReadingAnnouncements = false;
 
-                for (let i = 0; i < rows.length; i++) {
-                    let cols = rows[i].map(c => c.trim().replace(/\n/g, " ")); 
+                for (let i = 0; i < rawLines.length; i++) {
+                    const line = rawLines[i];
+                    if (!line || line.trim() === "") continue;
+                    
+                    const cols = parseCSVRow(line);
+
+                    if (cols[0] && cols[0].toUpperCase().includes("ANNOUNCEMENT")) {
+                        isReadingAnnouncements = true; continue;
+                    }
+
+                    if (isReadingAnnouncements) {
+                        if (cols[0] && cols[0] !== "") {
+                            sheetAnnouncement.text = cols[0];
+                            sheetAnnouncement.time = cols[1] || "";
+                            isReadingAnnouncements = false; 
+                        }
+                        continue;
+                    }
+
                     if (cols.length < 2) continue;
 
                     let timeStartIndex = -1;
@@ -261,7 +259,15 @@
 
         function updateDashboard() {
             try {
+                const timeMode = localStorage.getItem('sim_mode') || 'real';
                 let currentDisplayDate = new Date();
+                
+                if (timeMode === 'sim') {
+                    const simTimeStr = localStorage.getItem('sim_time') || "12:00";
+                    const parts = simTimeStr.split(':');
+                    currentDisplayDate.setHours(parseInt(parts[0], 10) || 0, parseInt(parts[1], 10) || 0, currentDisplayDate.getSeconds()); 
+                }
+
                 const hrs = String(currentDisplayDate.getHours()).padStart(2, '0');
                 const mins = String(currentDisplayDate.getMinutes()).padStart(2, '0');
                 const secs = String(currentDisplayDate.getSeconds()).padStart(2, '0');
@@ -334,30 +340,24 @@
                     gatePanel.className = `upcoming-right ${panelClass}`;
                 } else { upcomingBox.style.display = 'none'; }
 
-                // --- BOTTOM TICKER LOGIC (GLOBAL SYNC VIA GOOGLE SHEET) ---
+                // --- BOTTOM TICKER LOGIC ---
                 const tickerContainer = document.getElementById('bottom-ticker-box');
                 const tickerLabel = document.getElementById('ticker-label');
                 const tickerElem = document.getElementById('ticker-dynamic-text');
-                
                 let tickerHtml = "";
-                
-                // เช็คว่าสตาฟฟ์ส่งประกาศมาทาง Google Sheet คอลัมน์ G หรือไม่
+                let showAnnouncement = false;
+
                 if (sheetAnnouncement.text && sheetAnnouncement.text !== "") {
                     const cycleSec = currentSecondsValue % 60; 
-                    // แบ่งสัดส่วน: โชว์ประกาศฉุกเฉินสลับกับกฎสนามคนละครึ่งนาที (30 วินาที)
-                    if (cycleSec >= 30) {
-                        tickerContainer.classList.add('announcement-active');
-                        tickerLabel.textContent = "ANNOUNCEMENT";
-                        let textStr = `[${sheetAnnouncement.time}] ${sheetAnnouncement.text}`;
-                        tickerHtml = `📢 <span class="highlight-yellow">${textStr}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 📢 <span class="highlight-yellow">${textStr}</span>`;
-                    } else {
-                        tickerContainer.classList.remove('announcement-active');
-                        tickerLabel.textContent = "NOTE";
-                        let prefix = upcomingSession ? `NEXT: <span class="highlight-blue">${upcomingSession.category}</span> | ` : "";
-                        tickerHtml = `${prefix}<span class="highlight-yellow">${GATE_NOTE_DEFAULT}</span> &nbsp;&nbsp;&nbsp;&nbsp; ${prefix}<span class="highlight-yellow">${GATE_NOTE_DEFAULT}</span>`;
-                    }
+                    if (cycleSec >= 30) showAnnouncement = true;
+                }
+
+                if (showAnnouncement) {
+                    tickerContainer.classList.add('announcement-active');
+                    tickerLabel.textContent = "ANNOUNCEMENT";
+                    let textStr = `[${sheetAnnouncement.time}] ${sheetAnnouncement.text}`;
+                    tickerHtml = `📢 <span class="highlight-yellow">${textStr}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 📢 <span class="highlight-yellow">${textStr}</span>`;
                 } else {
-                    // หากไม่มีประกาศ ให้วิ่งกฎสนามเป็นตัวอักษรสีเหลืองปกติ
                     tickerContainer.classList.remove('announcement-active');
                     tickerLabel.textContent = "NOTE";
                     let prefix = upcomingSession ? `NEXT: <span class="highlight-blue">${upcomingSession.category}</span> | ` : "";
