@@ -6,7 +6,7 @@
     <title>Race Live Schedule & Countdown Dashboard</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0a0a0c; color: #ffffff; overflow: hidden; padding: 15px 15px 80px 15px; min-height: 100vh; display: flex; flex-direction: column; position: relative; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0a0a0c; color: #ffffff; overflow-x: hidden; padding: 15px 15px 80px 15px; min-height: 100vh; display: flex; flex-direction: column; position: relative; }
         .container { max-width: 1400px; margin: 0 auto; width: 100%; flex: 1; display: flex; flex-direction: column; }
         .fullscreen-btn { position: fixed; top: 15px; right: 15px; background: rgba(255, 255, 255, 0.1); color: #fff; border: 1px solid rgba(255, 255, 255, 0.2); padding: 6px 10px; border-radius: 4px; cursor: pointer; opacity: 0.3; z-index: 2000; font-size: 0.75rem; text-transform: uppercase; }
         .fullscreen-btn:hover { opacity: 1; background: rgba(255, 255, 255, 0.2); }
@@ -68,12 +68,12 @@
             .upcoming-left { min-width: 35%; display: flex; flex-direction: column; justify-content: center; border-right: 3px solid #0a0a0c; }
             .top-next-name { font-size: 2.2rem; } .top-next-act { font-size: 1.2rem; }
             .upcoming-right { padding: 15px 30px; border-top: none; }
-            .gate-title { font-size: 1.6rem; } .gate-times { font-size: 1.2rem; } .gate-times strong { font-size: 1.4rem; }
-            .gate-countdown-timer { font-size: 4rem; }
+            .gate-title { font-size: 1.6rem; } .gate-times { font-size: 1.2rem; .gate-times strong { font-size: 1.4rem; } }
+            .gate-countdown-timer { font-size: 3.5rem; } /* ปรับฟอนต์นิดหน่อยให้ h m s ใส่ได้พอดี */
             .session-card { padding: 40px; border-left-width: 12px; }
             .category-name { font-size: 4.5rem; } .activity-name { font-size: 2.8rem; }
             .countdown-box { margin-top: 35px; padding: 30px; }
-            .countdown-label { font-size: 2rem; } .countdown-timer { font-size: 7.5rem; }
+            .countdown-label { font-size: 2rem; } .countdown-timer { font-size: 6.5rem; }
             .qualifying-warning-box { font-size: 1.8rem; padding: 25px; }
             .ticker-container { height: 70px; } .ticker-label { font-size: 1.6rem; padding: 0 30px; } .ticker-text { font-size: 1.8rem; }
         }
@@ -248,12 +248,18 @@
             return `${String(Math.floor(totalMinutes / 60) % 24).padStart(2, '0')}:${String(totalMinutes % 60).padStart(2, '0')}`;
         }
 
+        // 🌟 อัปเกรดรูปแบบเวลาให้ดูง่ายขึ้น ป้องกันการสับสนว่าเป็นเวลาหน้าปัด
         function formatSecondsToMMSS(totalSeconds) {
             if (totalSeconds < 0) totalSeconds = 0;
             const hours = Math.floor(totalSeconds / 3600);
             const minutes = Math.floor((totalSeconds % 3600) / 60);
             const seconds = totalSeconds % 60;
-            if (hours > 0) return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            
+            // ถ้าเวลาเหลือมากกว่า 1 ชั่วโมง ให้แสดงเป็น x h xx m xx s
+            if (hours > 0) {
+                return `${hours}h ${String(minutes).padStart(2, '0')}m ${String(seconds).padStart(2, '0')}s`;
+            }
+            // ถ้าน้อยกว่า 1 ชั่วโมง แสดงเป็น MM:SS ปกติ
             return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
         }
 
@@ -341,15 +347,20 @@
                 } else { upcomingBox.style.display = 'none'; }
 
                 // --- BOTTOM TICKER LOGIC ---
+                let customNoteObj = null;
+                try { customNoteObj = JSON.parse(localStorage.getItem('custom_announcement')); } catch(e) {}
+                
+                const isGateNoteEnabled = localStorage.getItem('gate_note_enabled') !== 'false';
                 const tickerContainer = document.getElementById('bottom-ticker-box');
                 const tickerLabel = document.getElementById('ticker-label');
                 const tickerElem = document.getElementById('ticker-dynamic-text');
+
                 let tickerHtml = "";
                 let showAnnouncement = false;
 
                 if (sheetAnnouncement.text && sheetAnnouncement.text !== "") {
                     const cycleSec = currentSecondsValue % 60; 
-                    if (cycleSec >= 30) showAnnouncement = true;
+                    if (cycleSec >= 30) { showAnnouncement = true; }
                 }
 
                 if (showAnnouncement) {
@@ -361,7 +372,13 @@
                     tickerContainer.classList.remove('announcement-active');
                     tickerLabel.textContent = "NOTE";
                     let prefix = upcomingSession ? `NEXT: <span class="highlight-blue">${upcomingSession.category}</span> | ` : "";
-                    tickerHtml = `${prefix}<span class="highlight-yellow">${GATE_NOTE_DEFAULT}</span> &nbsp;&nbsp;&nbsp;&nbsp; ${prefix}<span class="highlight-yellow">${GATE_NOTE_DEFAULT}</span>`;
+                    let noteContent = isGateNoteEnabled ? GATE_NOTE_DEFAULT : "";
+                    
+                    if(noteContent === "") {
+                        tickerHtml = `${prefix} &nbsp;&nbsp;&nbsp;&nbsp; ${prefix}`;
+                    } else {
+                        tickerHtml = `${prefix}<span class="highlight-yellow">${noteContent}</span> &nbsp;&nbsp;&nbsp;&nbsp; ${prefix}<span class="highlight-yellow">${noteContent}</span>`;
+                    }
                 }
 
                 if (tickerElem.dataset.lastContent !== tickerHtml) {
