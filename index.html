@@ -143,8 +143,10 @@
             </div>
         </header>
 
+        <!-- 🏁 3-COLUMN GRID -->
         <div class="top-bar-grid" id="top-bar-grid" style="display: none;">
             
+            <!-- LEFT: NEXT SESSION -->
             <div class="top-col col-next">
                 <div class="col-header">NEXT SESSION</div>
                 <div class="col-cat" id="next-cat">LOADING...</div>
@@ -152,6 +154,7 @@
                 <div class="sp-open-badge" id="next-badge">WAITING DATA</div>
             </div>
 
+            <!-- MIDDLE: GATE -->
             <div class="top-col col-gate gate-default" id="gate-col">
                 <div class="col-header">SERVICE PARK GATE</div>
                 <div class="col-cat" id="gate-cat">-</div>
@@ -164,6 +167,7 @@
                 </div>
             </div>
 
+            <!-- RIGHT: SERVICE PARK -->
             <div class="top-col col-sp" id="sp-col">
                 <div class="col-header">ON SERVICE PARK</div>
                 <div class="col-cat" id="sp-cat">CLEAR</div>
@@ -175,6 +179,7 @@
 
         </div>
 
+        <!-- MAIN ON TRACK -->
         <main class="main-display">
             <div id="current-session-box" class="session-card">
                 <span class="session-status">ON TRACK NOW</span>
@@ -190,6 +195,7 @@
         </main>
     </div>
 
+    <!-- BOTTOM TICKER -->
     <div class="ticker-container" id="bottom-ticker-box">
         <div class="ticker-label" id="ticker-label">NOTE</div>
         <div class="ticker-content-wrapper">
@@ -347,22 +353,58 @@
 
                 let currentSession = null; 
                 let spSession = null; 
-                let upcomingSession = null;
+                let gateSession = null;
+                let nextSessionInfo = null;
+
                 const sortedSchedule = [...activeSchedule].sort((a,b) => timeToMinutes(a.startTime) - timeToMinutes(b.startTime));
+                let futureSessions = [];
 
                 for (let session of sortedSchedule) {
                     const startMins = timeToMinutes(session.startTime);
                     const endMins = timeToMinutes(session.endTime);
-                    const isMax = session.category.toUpperCase().includes("MAX");
 
                     if (currentMinutesOfDay >= startMins && currentMinutesOfDay < endMins) {
                         currentSession = session;
                     } else if (startMins > currentMinutesOfDay) {
-                        // เช็ค 5 นาทีก่อนเริ่มของรุ่น MAX ให้ย้ายเข้า Service Park (จอขวา)
-                        if (isMax && currentMinutesOfDay >= (startMins - 5) && currentMinutesOfDay < startMins) {
-                            spSession = session;
-                        } else if (!upcomingSession) {
-                            upcomingSession = session;
+                        futureSessions.push(session);
+                    }
+                }
+
+                // หากลุ่มที่อยู่ใน Service Park (5 นาทีก่อนเริ่ม)
+                let spIndex = -1;
+                for (let i = 0; i < futureSessions.length; i++) {
+                    let session = futureSessions[i];
+                    let startMins = timeToMinutes(session.startTime);
+                    let isMax = session.category.toUpperCase().includes("MAX");
+                    
+                    if (isMax && currentMinutesOfDay >= (startMins - 5) && currentMinutesOfDay < startMins) {
+                        spSession = session;
+                        spIndex = i;
+                        break; 
+                    }
+                }
+
+                // หากลุ่มที่อยู่ตรงประตู Gate (กลุ่มถัดไปที่ยังไม่เข้า SP)
+                let gateIndex = spIndex !== -1 ? spIndex + 1 : 0;
+                if (gateIndex < futureSessions.length) {
+                    gateSession = futureSessions[gateIndex];
+                }
+
+                // ค่าเริ่มต้นของช่องซ้าย (Next Session) คือให้โชว์กลุ่มเดียวกับ Gate ก่อน
+                nextSessionInfo = gateSession;
+
+                // 🚀 ลอจิกสำคัญ: ถ้าประตู Gate เปิดอยู่ ให้ช่องซ้าย (Next) ข้ามไปโชว์คิวถัดไปเลย!
+                if (gateSession) {
+                    let startMins = timeToMinutes(gateSession.startTime);
+                    let isMax = gateSession.category.toUpperCase().includes("MAX");
+                    let gateOpenMins = startMins - 15;
+                    let gateCloseMins = startMins - 5;
+
+                    if (isMax && currentMinutesOfDay >= gateOpenMins && currentMinutesOfDay < gateCloseMins) {
+                        if (gateIndex + 1 < futureSessions.length) {
+                            nextSessionInfo = futureSessions[gateIndex + 1];
+                        } else {
+                            nextSessionInfo = null; // ไม่มีคิวต่อไปแล้ว
                         }
                     }
                 }
@@ -388,15 +430,15 @@
 
                 // --- TOP 3-COLUMN GRID ---
                 const topGrid = document.getElementById('top-bar-grid');
-                if (upcomingSession || spSession) {
+                if (nextSessionInfo || gateSession || spSession) {
                     topGrid.style.display = 'grid';
                     
                     // 🟦 LEFT: NEXT SESSION
-                    if (upcomingSession) {
-                        document.getElementById('next-cat').textContent = upcomingSession.category;
-                        document.getElementById('next-act').textContent = `${upcomingSession.activity} @ ${upcomingSession.startTime}`;
-                        if (upcomingSession.category.toUpperCase().includes("MAX")) {
-                            const openMins = timeToMinutes(upcomingSession.startTime) - 15;
+                    if (nextSessionInfo) {
+                        document.getElementById('next-cat').textContent = nextSessionInfo.category;
+                        document.getElementById('next-act').textContent = `${nextSessionInfo.activity} @ ${nextSessionInfo.startTime}`;
+                        if (nextSessionInfo.category.toUpperCase().includes("MAX")) {
+                            const openMins = timeToMinutes(nextSessionInfo.startTime) - 15;
                             document.getElementById('next-badge').textContent = `SP OPENS @ ${formatTimeFromMinutes(openMins)}`;
                             document.getElementById('next-badge').style.background = "rgba(0,0,0,0.3)";
                         } else {
@@ -410,14 +452,14 @@
                         document.getElementById('next-badge').style.background = "transparent";
                     }
 
-                    // ⬛ MIDDLE: GATE (เฉพาะรุ่น MAX)
+                    // ⬛ MIDDLE: GATE (ใช้ gateSession)
                     const gateCol = document.getElementById('gate-col');
-                    if (upcomingSession && upcomingSession.category.toUpperCase().includes("MAX")) {
-                        const sessionStartMins = timeToMinutes(upcomingSession.startTime);
+                    if (gateSession && gateSession.category.toUpperCase().includes("MAX")) {
+                        const sessionStartMins = timeToMinutes(gateSession.startTime);
                         const gateOpenMins = sessionStartMins - 15; 
                         const gateCloseMins = sessionStartMins - 5;
                         
-                        document.getElementById('gate-cat').textContent = upcomingSession.category;
+                        document.getElementById('gate-cat').textContent = gateSession.category;
                         document.getElementById('gate-time-row').style.display = 'block';
                         document.getElementById('g-open').textContent = formatTimeFromMinutes(gateOpenMins);
                         document.getElementById('g-close').textContent = formatTimeFromMinutes(gateCloseMins);
@@ -435,7 +477,6 @@
                             document.getElementById('gate-status').textContent = "CLOSES IN"; 
                             document.getElementById('gate-timer').textContent = formatSecondsToMMSS(secsToGateClose);
                             
-                            // ลอจิกไฟกระพริบ: 3 นาทีแดงค้าง, 1 นาทีกระพริบ
                             if (secsToGateClose <= 60) panelClass += "gate-flash";
                             else if (secsToGateClose <= 180) panelClass += "gate-warning";
                             else panelClass += "gate-open";
@@ -446,15 +487,14 @@
                         }
                         gateCol.className = panelClass;
                     } else {
-                        // กิจกรรมที่ไม่ใช่ MAX ปิดช่องเกท
-                        document.getElementById('gate-cat').textContent = upcomingSession ? upcomingSession.category : "-";
+                        document.getElementById('gate-cat').textContent = gateSession ? gateSession.category : "-";
                         document.getElementById('gate-time-row').style.display = 'none';
                         document.getElementById('gate-status').textContent = "NOT REQUIRED"; 
                         document.getElementById('gate-timer').textContent = "--:--"; 
                         gateCol.className = "top-col col-gate gate-default";
                     }
 
-                    // 🟨 RIGHT: ON SERVICE PARK
+                    // 🟨 RIGHT: ON SERVICE PARK (ใช้ spSession)
                     const spCol = document.getElementById('sp-col');
                     if (spSession) {
                         document.getElementById('sp-cat').textContent = spSession.category;
@@ -497,10 +537,10 @@
                     tickerContainer.classList.remove('announcement-active');
                     tickerLabel.textContent = "NOTE";
                     
-                    let prefix = upcomingSession ? `NEXT: <span class="highlight-blue">${upcomingSession.category}</span> | ` : "";
+                    let prefix = nextSessionInfo ? `NEXT: <span class="highlight-blue">${nextSessionInfo.category}</span> | ` : "";
                     let noteContent = "";
                     
-                    if (isGateNoteEnabled && upcomingSession && upcomingSession.category.toUpperCase().includes("MAX")) {
+                    if (isGateNoteEnabled && nextSessionInfo && nextSessionInfo.category.toUpperCase().includes("MAX")) {
                         noteContent = GATE_NOTE_DEFAULT;
                     }
 
